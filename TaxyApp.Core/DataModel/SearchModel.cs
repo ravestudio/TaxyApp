@@ -35,7 +35,7 @@ namespace TaxyApp.Core.DataModel
 
             this._searchText = string.Empty;
 
-            this.Locations = new System.Collections.ObjectModel.ObservableCollection<string>();
+            this.Locations = new System.Collections.ObjectModel.ObservableCollection<LocationItem>();
         }
 
         void locationMg_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -71,7 +71,7 @@ namespace TaxyApp.Core.DataModel
         //    set;
         //}
 
-        public System.Collections.ObjectModel.ObservableCollection<string> Locations { get; set; }
+        public System.Collections.ObjectModel.ObservableCollection<LocationItem> Locations { get; set; }
 
         public async void Search()
         {
@@ -100,8 +100,7 @@ namespace TaxyApp.Core.DataModel
             {
                 foreach (MapLocation location in SearchResults.Locations)
                 {
-                    this.Locations.Add(location.Address.ToString());
-
+                    this.Locations.Add(new LocationItem(location));
                 }
             }
         }
@@ -117,6 +116,38 @@ namespace TaxyApp.Core.DataModel
                     new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+
+    public class LocationDS
+    {
+        public List<LocationItem> Locations { get; set; }
+
+        public LocationDS()
+        {
+            this.Locations = new List<LocationItem>();
+
+            this.Locations.Add(new LocationItem() { Address = "Жуковского" });
+            this.Locations.Add(new LocationItem() { Address = "Ленина" });
+            this.Locations.Add(new LocationItem() { Address = "Маяковского" });
+        }
+    }
+
+    public class LocationItem
+    {
+        public LocationItem()
+        {
+
+        }
+
+        public LocationItem(MapLocation location)
+        {
+            this.Address = string.Format("{0}, {1} {2} {3}", location.Address.Town, location.Address.Street, location.Address.StreetNumber, location.Address.BuildingName);
+
+            this.Point = location.Point;
+        }
+
+        public string Address { get; set; }
+        public Geopoint Point { get; set; }
     }
 
     public class SearchCommand : System.Windows.Input.ICommand
