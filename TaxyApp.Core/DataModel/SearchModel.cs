@@ -56,7 +56,9 @@ namespace TaxyApp.Core.DataModel
         {
             Geopoint hintPoint = await this.locationMg.GetCurrentGeopoint();
 
-            string searchQuery = string.Format("{0} {1}", this.locationMg.City, this.SearchText);
+            MapLocation currentLocation = await this.locationMg.GetCurrentLocation(hintPoint);
+
+            string searchQuery = string.Format("{0} {1}", currentLocation.Address.Town, this.SearchText);
 
             this.SearchResults = await this.locationMg.GetLocations(hintPoint, searchQuery);
 
