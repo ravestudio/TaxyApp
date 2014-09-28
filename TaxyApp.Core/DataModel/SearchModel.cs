@@ -9,7 +9,7 @@ using Windows.Services.Maps;
 
 namespace TaxyApp.Core.DataModel
 {
-    public class SearchModel
+    public class SearchModel : System.ComponentModel.INotifyPropertyChanged
     {
         private TaxyApp.Core.Managers.LocationManager locationMg = null;
         private SearchCommand search_cmd = null;
@@ -17,16 +17,33 @@ namespace TaxyApp.Core.DataModel
 
         private Object thisLock = new Object();
 
+        public bool LocationReady
+        {
+            get
+            {
+                return this.locationMg.LocationReady;
+            }
+        }
+
         public SearchModel()
         {
             this.search_cmd = new SearchCommand(this);
 
             this.locationMg = new Managers.LocationManager();
-            this.locationMg.Init();
+
+            this.locationMg.PropertyChanged += locationMg_PropertyChanged;
 
             this._searchText = string.Empty;
 
             this.Locations = new System.Collections.ObjectModel.ObservableCollection<string>();
+        }
+
+        void locationMg_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "LocationReady")
+            {
+                NotifyPropertyChanged("LocationReady");
+            }
         }
 
         public string SearchText {
@@ -83,12 +100,23 @@ namespace TaxyApp.Core.DataModel
             {
                 foreach (MapLocation location in SearchResults.Locations)
                 {
-                    this.Locations.Add(location.Address.Street);
+                    this.Locations.Add(location.Address.ToString());
 
                 }
             }
         }
 
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this,
+                    new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 
     public class SearchCommand : System.Windows.Input.ICommand

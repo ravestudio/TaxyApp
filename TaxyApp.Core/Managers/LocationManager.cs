@@ -9,7 +9,7 @@ using Windows.Services.Maps;
 
 namespace TaxyApp.Core.Managers
 {
-    public class LocationManager
+    public class LocationManager : System.ComponentModel.INotifyPropertyChanged
     {
 
         private Geolocator locator = new Geolocator();
@@ -18,16 +18,34 @@ namespace TaxyApp.Core.Managers
 
         //private Object thisLock = new Object();
 
+        public bool LocationReady
+        {
+            get;
+            set;
+        }
+
+        public LocationManager()
+        {
+            this.LocationReady = false;
+            this.Init();
+        }
+
         public async void Init()
         {
-            Geopoint hintPoint = await this.GetCurrentGeopoint();
+            Geopoint currentGeopoint = await this.GetCurrentGeopoint();
 
-            MapLocationFinderResult result = await MapLocationFinder.FindLocationsAtAsync(hintPoint);
+            MapLocationFinderResult result = null;
+
+            result = await MapLocationFinder.FindLocationsAtAsync(currentGeopoint);
 
             if (result.Status == MapLocationFinderStatus.Success)
             {
                 this._currentLocation = result.Locations[0];
             }
+
+            this.LocationReady = true;
+
+            NotifyPropertyChanged("LocationReady");
         }
 
 
@@ -58,6 +76,17 @@ namespace TaxyApp.Core.Managers
             MapLocationFinderResult result = await MapLocationFinder.FindLocationsAsync(searchQuery, hintPoint, 3);
 
             return result;
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this,
+                    new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }
