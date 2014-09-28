@@ -109,6 +109,20 @@ namespace TaxyApp
 
         #endregion
 
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ListView view = (ListView)sender;
+
+            var obj = view.SelectedItems;
+        }
+
+        private void ListView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ListView view = (ListView)sender;
+
+            var obj = view.SelectedItems[0];
+        }
+
 
     }
 }
