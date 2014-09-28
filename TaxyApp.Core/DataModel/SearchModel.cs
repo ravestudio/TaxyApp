@@ -15,11 +15,15 @@ namespace TaxyApp.Core.DataModel
         private SearchCommand search_cmd = null;
         private string _searchText = null;
 
+        private Object thisLock = new Object();
+
         public SearchModel()
         {
             this.search_cmd = new SearchCommand(this);
 
             this.locationMg = new Managers.LocationManager();
+            this.locationMg.Init();
+
             this._searchText = string.Empty;
 
             this.Locations = new System.Collections.ObjectModel.ObservableCollection<string>();
@@ -44,11 +48,11 @@ namespace TaxyApp.Core.DataModel
 
         public SearchCommand SearchChanged { get { return this.search_cmd; } }
 
-        public Windows.Services.Maps.MapLocationFinderResult SearchResults
-        {
-            get;
-            set;
-        }
+        //public Windows.Services.Maps.MapLocationFinderResult SearchResults
+        //{
+        //    get;
+        //    set;
+        //}
 
         public System.Collections.ObjectModel.ObservableCollection<string> Locations { get; set; }
 
@@ -56,23 +60,33 @@ namespace TaxyApp.Core.DataModel
         {
             Geopoint hintPoint = await this.locationMg.GetCurrentGeopoint();
 
-            MapLocation currentLocation = await this.locationMg.GetCurrentLocation(hintPoint);
+            MapLocation currentLocation = this.locationMg.GetCurrentLocation();
 
-            string searchQuery = string.Format("{0} {1}", currentLocation.Address.Town, this.SearchText);
+            string town = currentLocation.Address.Town;
 
-            this.SearchResults = await this.locationMg.GetLocations(hintPoint, searchQuery);
+            string searchQuery = string.Format("{0} {1}", town, this.SearchText);
 
+            MapLocationFinderResult SearchResults = await this.locationMg.GetLocations(hintPoint, searchQuery);
+
+            lock (this.thisLock)
+            {
+                this.FillLocations(SearchResults);
+
+            }
+        }
+
+        private void FillLocations(MapLocationFinderResult SearchResults)
+        {
             this.Locations.Clear();
 
-            if (this.SearchResults.Status == MapLocationFinderStatus.Success)
+            if (SearchResults.Status == MapLocationFinderStatus.Success)
             {
-                foreach (MapLocation location in this.SearchResults.Locations)
+                foreach (MapLocation location in SearchResults.Locations)
                 {
                     this.Locations.Add(location.Address.Street);
 
                 }
             }
-
         }
 
     }
