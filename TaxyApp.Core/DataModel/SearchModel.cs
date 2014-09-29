@@ -13,10 +13,11 @@ namespace TaxyApp.Core.DataModel
     {
         private TaxyApp.Core.Managers.LocationManager locationMg = null;
         private SearchCommand search_cmd = null;
-        private SelectItemCommand selectItem_cmd = null;
         private string _searchText = null;
 
         private Object thisLock = new Object();
+
+        public LocationItem SelectedLocation { get; set; }
 
         public bool LocationReady
         {
@@ -29,7 +30,6 @@ namespace TaxyApp.Core.DataModel
         public SearchModel()
         {
             this.search_cmd = new SearchCommand(this);
-            this.selectItem_cmd = new SelectItemCommand();
 
             this.locationMg = new Managers.LocationManager();
 
@@ -66,8 +66,6 @@ namespace TaxyApp.Core.DataModel
         }
 
         public SearchCommand SearchChanged { get { return this.search_cmd; } }
-
-        public SelectItemCommand SelectItem { get { return this.selectItem_cmd; } }
 
         //public Windows.Services.Maps.MapLocationFinderResult SearchResults
         //{
@@ -183,27 +181,5 @@ namespace TaxyApp.Core.DataModel
         }
     }
 
-    public class SelectItemCommand : System.Windows.Input.ICommand
-    {
 
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
-        {
-            Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
-
-            var element = e.OriginalSource as Windows.UI.Xaml.FrameworkElement;
-
-            //Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
-
-            //Windows.UI.Xaml.Controls.Control textblock = (Windows.UI.Xaml.Controls.Control)e.OriginalSource;
-
-            LocationItem location = (LocationItem)element.DataContext;
-        }
-    }
 }

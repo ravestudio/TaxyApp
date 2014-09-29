@@ -26,7 +26,7 @@ namespace TaxyApp
     public sealed partial class AddPointPage : Page
     {
         private NavigationHelper navigationHelper;
-        private TaxyApp.Core.DataModel.SearchModel defaultViewModel = new TaxyApp.Core.DataModel.SearchModel();
+        private TaxyApp.Controller.OrderController orderController = Controller.ControllerFactory.Instance.GetOrderController();
 
         public AddPointPage()
         {
@@ -49,9 +49,9 @@ namespace TaxyApp
         /// Получает модель представлений для данного объекта <see cref="Page"/>.
         /// Эту настройку можно изменить на модель строго типизированных представлений.
         /// </summary>
-        public TaxyApp.Core.DataModel.SearchModel DefaultViewModel
+        public TaxyApp.Controller.OrderController DefaultViewModel
         {
-            get { return this.defaultViewModel; }
+            get { return this.orderController; }
         }
 
         /// <summary>

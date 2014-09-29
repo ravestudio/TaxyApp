@@ -18,7 +18,7 @@ namespace TaxyApp.Core.DataModel
 
             OrderPoint pointfrom = new OrderPoint();
             pointfrom.Priority = 0;
-            //pointfrom.Location = new LocationItem() {  Address = "Омск, Жуковского 33"};
+            pointfrom.Location = new LocationItem() {  Address = string.Empty};
 
             //OrderPoint point1 = new OrderPoint();
             //point1.Priority = 1;
@@ -80,24 +80,4 @@ namespace TaxyApp.Core.DataModel
         }
     }
 
-    public class SetLocationCommand : System.Windows.Input.ICommand
-    {
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
-        {
-            Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
-
-            var element = e.OriginalSource as Windows.UI.Xaml.FrameworkElement;
-
-            OrderPoint orderPoint = (OrderPoint)element.DataContext;
-
-        }
-    }
 }

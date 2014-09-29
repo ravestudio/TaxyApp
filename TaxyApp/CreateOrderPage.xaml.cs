@@ -30,7 +30,7 @@ namespace TaxyApp
     public sealed partial class CreateOrderPage : Page
     {
         private NavigationHelper navigationHelper;
-        private TaxyApp.Core.DataModel.OrderModel defaultViewModel = new TaxyApp.Core.DataModel.OrderModel();
+        private TaxyApp.Controller.OrderController orderController = Controller.ControllerFactory.Instance.GetOrderController();
 
         public CreateOrderPage()
         {
@@ -53,9 +53,9 @@ namespace TaxyApp
         /// Получает модель представлений для данного объекта <see cref="Page"/>.
         /// Эту настройку можно изменить на модель строго типизированных представлений.
         /// </summary>
-        public TaxyApp.Core.DataModel.OrderModel DefaultViewModel
+        public TaxyApp.Controller.OrderController DefaultViewModel
         {
-            get { return this.defaultViewModel; }
+            get { return this.orderController; }
         }
 
         /// <summary>
@@ -160,5 +160,12 @@ namespace TaxyApp
         }
 
         #endregion
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var orderpoint = (TaxyApp.Core.DataModel.OrderPoint)e.ClickedItem;
+
+            this.DefaultViewModel.SetLocation.Execute(orderpoint);
+        }
     }
 }

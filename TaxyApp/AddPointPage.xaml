@@ -41,8 +41,8 @@
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel>
                 <TextBox x:Name="SearchText"
-                         Text="{Binding Path = SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding Path=LocationReady, Mode=TwoWay}">
+                         Text="{Binding Path = SearchModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding Path=SearchModel.LocationReady, Mode=TwoWay}">
                     <!--<i:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="TextChanged">
                             <core:InvokeCommandAction Command="{Binding SearchChanged}">
@@ -52,7 +52,7 @@
                 </TextBox>
 
                 <ListView
-                    ItemsSource="{Binding Locations}"
+                    ItemsSource="{Binding SearchModel.Locations}"
                     d:DataContext="{Binding Source={StaticResource LocationDS}}"
                     VerticalAlignment="Top" HorizontalAlignment="Stretch" >
 
