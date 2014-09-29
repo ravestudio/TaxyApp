@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="DataModel\OrderModel.cs" />
     <Compile Include="DataModel\SearchModel.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

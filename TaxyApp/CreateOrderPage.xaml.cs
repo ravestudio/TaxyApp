@@ -30,7 +30,7 @@ namespace TaxyApp
     public sealed partial class CreateOrderPage : Page
     {
         private NavigationHelper navigationHelper;
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private TaxyApp.Core.DataModel.OrderModel defaultViewModel = new TaxyApp.Core.DataModel.OrderModel();
 
         public CreateOrderPage()
         {
@@ -53,7 +53,7 @@ namespace TaxyApp
         /// Получает модель представлений для данного объекта <see cref="Page"/>.
         /// Эту настройку можно изменить на модель строго типизированных представлений.
         /// </summary>
-        public ObservableDictionary DefaultViewModel
+        public TaxyApp.Core.DataModel.OrderModel DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
@@ -103,26 +103,23 @@ namespace TaxyApp
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
 
-            Geolocator geo = new Geolocator();
+            //Geolocator geo = new Geolocator();
 
-            Geoposition pos = await geo.GetGeopositionAsync();
-            //textLatitude.Text = "Latitude: " + pos.Coordinate.Point.Position.Latitude.ToString();
-            //textLongitude.Text = "Longitude: " + pos.Coordinate.Point.Position.Longitude.ToString();
-            //textAccuracy.Text = "Accuracy: " + pos.Coordinate.Accuracy.ToString();
+            //Geoposition pos = await geo.GetGeopositionAsync();
 
-            Geopoint myGeopoint = new Geopoint(new BasicGeoposition()
-            {
-                Latitude = pos.Coordinate.Point.Position.Latitude,
-                Longitude = pos.Coordinate.Point.Position.Longitude
-            });
+            //Geopoint myGeopoint = new Geopoint(new BasicGeoposition()
+            //{
+            //    Latitude = pos.Coordinate.Point.Position.Latitude,
+            //    Longitude = pos.Coordinate.Point.Position.Longitude
+            //});
 
-            MapControl1.Center = myGeopoint;
+            //MapControl1.Center = myGeopoint;
 
 
-            MapControl1.ZoomLevel = 12;
-            MapControl1.LandmarksVisible = true;
+            //MapControl1.ZoomLevel = 12;
+            //MapControl1.LandmarksVisible = true;
 
-            AddMapIcon(myGeopoint);
+            //AddMapIcon(myGeopoint);
 
             this.navigationHelper.OnNavigatedTo(e);
         }
@@ -145,7 +142,7 @@ namespace TaxyApp
             MapControl.SetLocation(fence, point);
             MapControl.SetNormalizedAnchorPoint(fence, new Point(0.5, 0.5));
 
-            MapControl1.Children.Add(fence);
+            //MapControl1.Children.Add(fence);
 
             
 

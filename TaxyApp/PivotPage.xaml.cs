@@ -191,7 +191,7 @@ namespace TaxyApp
 
         private void CreateOrderBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddPointPage)); 
+            this.Frame.Navigate(typeof(CreateOrderPage)); 
         }
     }
 }
