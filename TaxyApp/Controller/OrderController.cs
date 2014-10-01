@@ -44,11 +44,10 @@ namespace TaxyApp.Controller
 
         public void Execute(object parameter)
         {
-            //Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
+            Windows.UI.Xaml.Controls.ItemClickEventArgs e = (Windows.UI.Xaml.Controls.ItemClickEventArgs)parameter;
 
-            //var element = e.OriginalSource as Windows.UI.Xaml.FrameworkElement;
+            TaxyApp.Core.DataModel.OrderPoint orderPoint = (TaxyApp.Core.DataModel.OrderPoint)e.ClickedItem;
 
-            OrderPoint orderPoint = (OrderPoint)parameter;
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -77,20 +76,18 @@ namespace TaxyApp.Controller
 
         public void Execute(object parameter)
         {
-            Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
+            Windows.UI.Xaml.Controls.ItemClickEventArgs e = (Windows.UI.Xaml.Controls.ItemClickEventArgs)parameter;
 
-            var element = e.OriginalSource as Windows.UI.Xaml.FrameworkElement;
 
-            //Windows.UI.Xaml.Input.TappedRoutedEventArgs e = (Windows.UI.Xaml.Input.TappedRoutedEventArgs)parameter;
-
-            //Windows.UI.Xaml.Controls.Control textblock = (Windows.UI.Xaml.Controls.Control)e.OriginalSource;
-
-            LocationItem location = (LocationItem)element.DataContext;
+            LocationItem location = (LocationItem)e.ClickedItem;
 
             _controller.SearchModel.SelectedLocation.Address = location.Address;
             _controller.SearchModel.SelectedLocation.Point = location.Point;
+            _controller.SearchModel.SelectedLocation.MapLocation = location.MapLocation;
 
             Frame rootFrame = Window.Current.Content as Frame;
+
+            this._controller.OrderModel.UpdatePoints();
 
             rootFrame.GoBack();
         }

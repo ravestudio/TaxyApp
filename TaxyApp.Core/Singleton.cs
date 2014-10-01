@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaxyApp.DataModel
+namespace TaxyApp.Core
 {
     public class Singleton<T> where T : class, new()
     {

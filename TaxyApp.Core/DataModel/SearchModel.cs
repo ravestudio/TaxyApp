@@ -146,10 +146,13 @@ namespace TaxyApp.Core.DataModel
             this.Address = string.Format("{0}, {1} {2} {3}", location.Address.Town, location.Address.Street, location.Address.StreetNumber, location.Address.BuildingName);
 
             this.Point = location.Point;
+            this.MapLocation = location;
         }
 
         public string Address { get; set; }
         public Geopoint Point { get; set; }
+        public MapLocation MapLocation { get; set; }
+
     }
 
     public class SearchCommand : System.Windows.Input.ICommand

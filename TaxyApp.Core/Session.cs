@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaxyApp.DataModel
+namespace TaxyApp.Core
 {
     public class Session : Singleton<Session>
     {
-        private User user = null;
+        private DataModel.User user = null;
 
-        public User GetUser()
+        public DataModel.User GetUser()
         {
             return this.user;
         }
 
-        public void SetUSer(User user)
+        public void SetUSer(DataModel.User user)
         {
             this.user = user;
         }

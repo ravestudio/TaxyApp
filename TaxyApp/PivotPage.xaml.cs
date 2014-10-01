@@ -170,7 +170,7 @@ namespace TaxyApp
             DataModel.LoginModel model = new DataModel.LoginModel();
 
 
-            WebApiClient client = new WebApiClient();
+            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
 
             string url = "http://serv.giddix.ru/api/passenger_auth/";
 
@@ -184,9 +184,9 @@ namespace TaxyApp
 
             string data = await client.GetData(url, postData);
 
-            DataModel.User user = client.GetObject<DataModel.User>(data);
+            TaxyApp.Core.DataModel.User user = client.GetObject<TaxyApp.Core.DataModel.User>(data);
 
-            DataModel.Session.Instance.SetUSer(user);
+            TaxyApp.Core.Session.Instance.SetUSer(user);
         }
 
         private void CreateOrderBtn_Click(object sender, RoutedEventArgs e)

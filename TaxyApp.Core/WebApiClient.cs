@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 using System.Net;
 
-
-namespace TaxyApp
+namespace TaxyApp.Core
 {
     public class WebApiClient
     {
@@ -42,7 +41,7 @@ namespace TaxyApp
         }
 
         public T GetObject<T>(string jsonStr)
-            where T: DataModel.Entity, new()
+            where T : DataModel.Entity, new()
         {
             T obj = null;
 

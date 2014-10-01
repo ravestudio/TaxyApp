@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace TaxyApp.Core.DataModel
 {
@@ -42,6 +43,49 @@ namespace TaxyApp.Core.DataModel
                 return this._orderPointList;
             }
         }
+
+        public void UpdatePoints()
+        {
+            if (this._orderPointList.Count == this._orderPointList.Where(p => p.IsDataReady()).Count())
+            {
+                OrderPoint newPoint = new OrderPoint();
+                newPoint.Priority = this._orderPointList.Count;
+
+                newPoint.Location = new LocationItem() {  Address = string.Empty};
+
+                this._orderPointList.Add(newPoint);
+            }
+        }
+
+        public List<KeyValuePair<string, string>> ConverToKeyValue()
+        {
+            List<KeyValuePair<string, string>> keyValueData = new List<KeyValuePair<string, string>>();
+
+            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
+
+            int i = 0;
+            foreach(OrderPoint orderPoint in this._orderPointList)
+            {
+                keyValueData.Add(new KeyValuePair<string, string>
+                    (string.Format("address[{0}]",i),
+                        string.Format("{0}, {1}, {2} {3}",
+                        orderPoint.Location.MapLocation.Address.Country,
+                        orderPoint.Location.MapLocation.Address.Town,
+                        orderPoint.Location.MapLocation.Address.Street,
+                        orderPoint.Location.MapLocation.Address.StreetNumber
+                        )));
+
+                keyValueData.Add(new KeyValuePair<string, string>
+                    (string.Format("coords[{0}]",i), string.Format("{0} {1}", orderPoint.Location.Point.Position.Latitude, orderPoint.Location.Point.Position.Longitude)));
+
+                keyValueData.Add(new KeyValuePair<string, string>
+                    (string.Format("priority[{0}]",i), orderPoint.Priority.ToString()));
+
+                i++;
+            }
+
+            return keyValueData;
+        }
     }
 
     public class OrderPoint
@@ -77,6 +121,11 @@ namespace TaxyApp.Core.DataModel
             }
 
             return res;
+        }
+
+        public bool IsDataReady()
+        {
+            return (this.Location != null && !string.IsNullOrEmpty(this.Location.Address));
         }
     }
 

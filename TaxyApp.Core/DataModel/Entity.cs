@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaxyApp.DataModel
+namespace TaxyApp.Core.DataModel
 {
     public class Entity
     {

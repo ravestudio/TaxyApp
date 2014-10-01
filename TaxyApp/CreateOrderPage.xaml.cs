@@ -161,11 +161,5 @@ namespace TaxyApp
 
         #endregion
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var orderpoint = (TaxyApp.Core.DataModel.OrderPoint)e.ClickedItem;
-
-            this.DefaultViewModel.SetLocation.Execute(orderpoint);
-        }
     }
 }

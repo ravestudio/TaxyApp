@@ -36,15 +36,14 @@
             <ListView
                 ItemsSource="{Binding OrderModel.OrderPointList}"
                 IsItemClickEnabled="True"
-                ItemClick="ListView_ItemClick"
                 >
 
-                <!--<i:Interaction.Behaviors>
+                <i:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="ItemClick">
                         <core:InvokeCommandAction Command="{Binding SetLocation}">
                         </core:InvokeCommandAction>
                     </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>-->
+                </i:Interaction.Behaviors>
                 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -64,4 +63,10 @@
             </ListView>
         </Grid>
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Uid="AddAppBarButton" x:Name="CreateAppBarButton" Label="Create"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

@@ -113,11 +113,8 @@
     <Compile Include="CreateOrderPage.xaml.cs">
       <DependentUpon>CreateOrderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataModel\Entity.cs" />
     <Compile Include="DataModel\LoginModel.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
-    <Compile Include="DataModel\Session.cs" />
-    <Compile Include="DataModel\Singleton.cs" />
     <Compile Include="ItemPage.xaml.cs">
       <DependentUpon>ItemPage.xaml</DependentUpon>
     </Compile>
@@ -125,7 +122,6 @@
       <DependentUpon>PivotPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

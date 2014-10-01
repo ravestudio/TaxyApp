@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaxyApp.Controller
 {
-    public class ControllerFactory : TaxyApp.DataModel.Singleton<ControllerFactory>
+    public class ControllerFactory : TaxyApp.Core.Singleton<ControllerFactory>
     {
         private OrderController orderController = null;
 

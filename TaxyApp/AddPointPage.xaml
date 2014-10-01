@@ -54,10 +54,11 @@
                 <ListView
                     ItemsSource="{Binding SearchModel.Locations}"
                     d:DataContext="{Binding Source={StaticResource LocationDS}}"
-                    VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+                    VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                    IsItemClickEnabled="True">
 
                     <i:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="Tapped">
+                        <core:EventTriggerBehavior EventName="ItemClick">
                             <core:InvokeCommandAction Command="{Binding SelectItem}">
                             </core:InvokeCommandAction>
                         </core:EventTriggerBehavior>
