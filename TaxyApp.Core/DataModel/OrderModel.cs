@@ -64,7 +64,7 @@ namespace TaxyApp.Core.DataModel
             keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
 
             int i = 0;
-            foreach(OrderPoint orderPoint in this._orderPointList)
+            foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
             {
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("address[{0}]",i),
@@ -83,6 +83,11 @@ namespace TaxyApp.Core.DataModel
 
                 i++;
             }
+
+            //keyValueData.Add(new KeyValuePair<string, string>("service","1"));
+            //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "1"));
+            //keyValueData.Add(new KeyValuePair<string, string>("routemeters", "7000"));
+            //keyValueData.Add(new KeyValuePair<string, string>("routetime", "30"));
 
             return keyValueData;
         }

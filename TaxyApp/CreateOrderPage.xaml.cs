@@ -161,5 +161,10 @@ namespace TaxyApp
 
         #endregion
 
+        private void CreateAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.orderController.CreateOrder();
+        }
+
     }
 }

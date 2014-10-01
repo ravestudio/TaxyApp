@@ -66,7 +66,7 @@
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton x:Uid="AddAppBarButton" x:Name="CreateAppBarButton" Label="Create"/>
+            <AppBarButton x:Uid="CreateAppBarButton" x:Name="CreateAppBarButton" Label="Create" Icon="Accept" Click="CreateAppBarButton_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

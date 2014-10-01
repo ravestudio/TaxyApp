@@ -25,6 +25,26 @@ namespace TaxyApp.Controller
             this.SetLocation = new SetLocationCommand(this);
             this.SelectItem = new SelectItemCommand(this);
         }
+
+        public async void CreateOrder()
+        {
+            TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
+
+            var postData = this.OrderModel.ConverToKeyValue();
+
+            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
+
+            string url = "http://serv.giddix.ru/api/passenger_setorder/";
+
+
+            
+            postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
+            postData.Add(new KeyValuePair<string, string>("token", user.token));
+            postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
+
+
+            string data = await client.GetData(url, postData);
+        }
     }
 
     public class SetLocationCommand : System.Windows.Input.ICommand
