@@ -27,6 +27,7 @@
                 <Grid>
                     <Button x:Uid="LoginBtn" x:Name="LoginBtn" Content="Login" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Click="LoginBtn_Click"/>
                     <Button x:Uid="CreateOrderBtn" x:Name="CreateOrderBtn" Content="Create Order" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Click="CreateOrderBtn_Click"/>
+                    <Button x:Uid="myOrderListBtn" x:Name="myOrderListBtn" Content="My Order list" HorizontalAlignment="Left" Margin="0,140,0,0" VerticalAlignment="Top" Click="myOrderListBtn_Click"/>
                 </Grid>
 
 

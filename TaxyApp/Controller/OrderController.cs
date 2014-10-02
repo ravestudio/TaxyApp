@@ -30,7 +30,7 @@ namespace TaxyApp.Controller
         {
             TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
 
-            var postData = this.OrderModel.ConverToKeyValue();
+            var postData = await this.OrderModel.ConverToKeyValue();
 
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
 
@@ -41,6 +41,24 @@ namespace TaxyApp.Controller
             postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
+
+
+            string data = await client.GetData(url, postData);
+        }
+
+        public async void GetUserOrders()
+        {
+
+            string url = "http://serv.giddix.ruapi/passenger_getmyorders/";
+
+            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
+
+            TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
+
+            var postData = new List<KeyValuePair<string, string>>();
+
+            postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
+            postData.Add(new KeyValuePair<string, string>("token", user.token));
 
 
             string data = await client.GetData(url, postData);

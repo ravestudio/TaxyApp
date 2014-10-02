@@ -78,6 +78,17 @@ namespace TaxyApp.Core.Managers
             return result;
         }
 
+        public async Task<MapRouteFinderResult> GetRoute(IEnumerable<Geopoint> points)
+        {
+            MapRouteFinderResult routeResult =
+                await MapRouteFinder.GetDrivingRouteFromWaypointsAsync(
+                points,
+                MapRouteOptimization.Time,
+                MapRouteRestrictions.None);
+
+            return routeResult;
+        }
+
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)

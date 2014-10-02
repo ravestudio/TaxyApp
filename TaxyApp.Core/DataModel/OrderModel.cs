@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
+using Windows.Devices.Geolocation;
+
 namespace TaxyApp.Core.DataModel
 {
     public class OrderModel
@@ -57,7 +59,7 @@ namespace TaxyApp.Core.DataModel
             }
         }
 
-        public List<KeyValuePair<string, string>> ConverToKeyValue()
+        public async Task<List<KeyValuePair<string, string>>> ConverToKeyValue()
         {
             List<KeyValuePair<string, string>> keyValueData = new List<KeyValuePair<string, string>>();
 
@@ -86,8 +88,20 @@ namespace TaxyApp.Core.DataModel
 
             //keyValueData.Add(new KeyValuePair<string, string>("service","1"));
             //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "1"));
-            //keyValueData.Add(new KeyValuePair<string, string>("routemeters", "7000"));
-            //keyValueData.Add(new KeyValuePair<string, string>("routetime", "30"));
+
+            Managers.LocationManager locationMG = Managers.ManagerFactory.Instance.GetLocationManager();
+
+            IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
+                .OrderBy(p => p.Priority)
+                .Select(p => p.Location.Point);
+
+            Windows.Services.Maps.MapRouteFinderResult routeResult = await locationMG.GetRoute(geopoints);
+
+            if (routeResult.Status == Windows.Services.Maps.MapRouteFinderStatus.Success)
+            {
+                keyValueData.Add(new KeyValuePair<string, string>("routemeters", routeResult.Route.LengthInMeters.ToString()));
+                keyValueData.Add(new KeyValuePair<string, string>("routetime", routeResult.Route.EstimatedDuration.Minutes.ToString()));
+            }
 
             return keyValueData;
         }

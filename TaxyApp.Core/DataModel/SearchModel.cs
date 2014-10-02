@@ -31,7 +31,9 @@ namespace TaxyApp.Core.DataModel
         {
             this.search_cmd = new SearchCommand(this);
 
-            this.locationMg = new Managers.LocationManager();
+            //this.locationMg = new Managers.LocationManager();
+
+            this.locationMg = Managers.ManagerFactory.Instance.GetLocationManager();
 
             this.locationMg.PropertyChanged += locationMg_PropertyChanged;
 

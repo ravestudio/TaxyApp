@@ -193,5 +193,10 @@ namespace TaxyApp
         {
             this.Frame.Navigate(typeof(CreateOrderPage)); 
         }
+
+        private void myOrderListBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Controller.ControllerFactory.Instance.GetOrderController().GetUserOrders();
+        }
     }
 }
