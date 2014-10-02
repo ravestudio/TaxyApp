@@ -38,6 +38,9 @@ namespace TaxyApp.Core.DataModel
             this._orderPointList.Add(pointfrom);
         }
 
+        public Windows.UI.Xaml.Controls.Maps.MapControl RouteMapControl { get; set; }
+        public Windows.Services.Maps.MapRoute MapRoute { get; set; }
+
         public ObservableCollection<OrderPoint> OrderPointList
         {
             get
@@ -48,6 +51,8 @@ namespace TaxyApp.Core.DataModel
 
         public void UpdatePoints()
         {
+            this.UpdateRoute();
+
             if (this._orderPointList.Count == this._orderPointList.Where(p => p.IsDataReady()).Count())
             {
                 OrderPoint newPoint = new OrderPoint();
@@ -56,6 +61,40 @@ namespace TaxyApp.Core.DataModel
                 newPoint.Location = new LocationItem() {  Address = string.Empty};
 
                 this._orderPointList.Add(newPoint);
+            }
+        }
+
+        public async void UpdateRoute()
+        {
+            Managers.LocationManager locationMG = Managers.ManagerFactory.Instance.GetLocationManager();
+
+            IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
+                .OrderBy(p => p.Priority)
+                .Select(p => p.Location.Point);
+
+            if (geopoints.Count() > 1)
+            {
+
+                Windows.Services.Maps.MapRouteFinderResult routeResult = await locationMG.GetRoute(geopoints);
+
+                if (routeResult.Status == Windows.Services.Maps.MapRouteFinderStatus.Success)
+                {
+                    this.MapRoute = routeResult.Route;
+
+                    Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
+                    viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
+                    viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
+
+                    // Add the new MapRouteView to the Routes collection
+                    // of the MapControl.
+                    this.RouteMapControl.Routes.Add(viewOfRoute);
+
+                    // Fit the MapControl to the route.
+                    await this.RouteMapControl.TrySetViewBoundsAsync(
+                        this.MapRoute.BoundingBox,
+                        null,
+                        Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                }
             }
         }
 

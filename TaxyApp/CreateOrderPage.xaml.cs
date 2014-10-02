@@ -36,6 +36,8 @@ namespace TaxyApp
         {
             this.InitializeComponent();
 
+            this.orderController.OrderModel.RouteMapControl = this.RouteMapControl;
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -103,23 +105,17 @@ namespace TaxyApp
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
 
-            //Geolocator geo = new Geolocator();
+            TaxyApp.Core.Managers.LocationManager locationMG = TaxyApp.Core.Managers.ManagerFactory.Instance.GetLocationManager();
 
-            //Geoposition pos = await geo.GetGeopositionAsync();
+            Geopoint myGeopoint = await locationMG.GetCurrentGeopoint();
 
-            //Geopoint myGeopoint = new Geopoint(new BasicGeoposition()
-            //{
-            //    Latitude = pos.Coordinate.Point.Position.Latitude,
-            //    Longitude = pos.Coordinate.Point.Position.Longitude
-            //});
-
-            //MapControl1.Center = myGeopoint;
+            RouteMapControl.Center = myGeopoint;
 
 
-            //MapControl1.ZoomLevel = 12;
-            //MapControl1.LandmarksVisible = true;
+            RouteMapControl.ZoomLevel = 12;
+            RouteMapControl.LandmarksVisible = true;
 
-            //AddMapIcon(myGeopoint);
+            AddMapIcon(myGeopoint);
 
             this.navigationHelper.OnNavigatedTo(e);
         }
@@ -135,14 +131,14 @@ namespace TaxyApp
             //MapIcon MapIcon1 = new MapIcon();
             //MapIcon1.Title = "Space Needle";
 
-            //var childObj = new Image {
-            //    Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/point.png"))
-            //};
+            var childObj = new Image {
+                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/point.png"))
+            };
 
             MapControl.SetLocation(fence, point);
             MapControl.SetNormalizedAnchorPoint(fence, new Point(0.5, 0.5));
 
-            //MapControl1.Children.Add(fence);
+            RouteMapControl.Children.Add(fence);
 
             
 

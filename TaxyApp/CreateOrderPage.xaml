@@ -12,56 +12,62 @@
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid x:Name="LayoutRoot">
+    
+    <Grid>
 
-        <Grid.ChildrenTransitions>
-            <TransitionCollection>
-                <EntranceThemeTransition/>
-            </TransitionCollection>
-        </Grid.ChildrenTransitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--Панель заголовка-->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="TAXY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="Create Order" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
-
-        <!--TODO: Содержимое должно размещаться в следующей сетке-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <ListView
-                ItemsSource="{Binding OrderModel.OrderPointList}"
-                IsItemClickEnabled="True"
-                >
-
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="ItemClick">
-                        <core:InvokeCommandAction Command="{Binding SetLocation}">
-                        </core:InvokeCommandAction>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
+        <Pivot x:Uid="Pivot" Title="TAXY APPLICATION" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            
+            <PivotItem
+                x:Uid="PivotRoute"
+                Header="Route">
                 
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
+            
+                <!--Панель заголовка-->
+                <!--<StackPanel Grid.Row="0" Margin="19,0,0,0">
+                    <TextBlock Text="TAXY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+                    <TextBlock Text="Create Order" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+                </StackPanel>-->
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="0,10,0,0">
-                            <TextBlock Text="{Binding Path=PointTitle}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>
-                            <TextBlock Text="{Binding Path=Location.Address}" Style="{StaticResource ComboBoxPlaceholderTextBlockStyle}" Margin="5,15"></TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                <!--TODO: Содержимое должно размещаться в следующей сетке-->
+                <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+                    <ListView
+                    ItemsSource="{Binding OrderModel.OrderPointList}"
+                    IsItemClickEnabled="True"
+                    >
 
-            </ListView>
-        </Grid>
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="ItemClick">
+                                <core:InvokeCommandAction Command="{Binding SetLocation}">
+                                </core:InvokeCommandAction>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock Text="{Binding Path=PointTitle}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>
+                                    <TextBlock Text="{Binding Path=Location.Address}" Style="{StaticResource ComboBoxPlaceholderTextBlockStyle}" Margin="5,15"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+                </Grid>
+            </PivotItem>
+
+
+            <PivotItem
+                x:Uid="PivotMap"
+                Header="Map">
+                <Maps:MapControl x:Name="RouteMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </PivotItem>
+        </Pivot>
     </Grid>
 
     <Page.BottomAppBar>
