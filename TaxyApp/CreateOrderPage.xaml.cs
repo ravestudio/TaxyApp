@@ -102,52 +102,11 @@ namespace TaxyApp
         /// </summary>
         /// <param name="e">Предоставляет данные для методов навигации и обработчики
         /// событий, которые не могут отменить запрос навигации.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-
-            TaxyApp.Core.Managers.LocationManager locationMG = TaxyApp.Core.Managers.ManagerFactory.Instance.GetLocationManager();
-
-            Geopoint myGeopoint = await locationMG.GetCurrentGeopoint();
-
-            RouteMapControl.Center = myGeopoint;
-
-
-            RouteMapControl.ZoomLevel = 12;
-            RouteMapControl.LandmarksVisible = true;
-
-            AddMapIcon(myGeopoint);
+            this.DefaultViewModel.OrderModel.ShowMyPossitionAsync();
 
             this.navigationHelper.OnNavigatedTo(e);
-        }
-
-        private void AddMapIcon(Geopoint point)
-        {
-            Windows.UI.Xaml.Shapes.Ellipse fence = new Windows.UI.Xaml.Shapes.Ellipse();
-            fence.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255,50,120,90));
-
-            fence.Width = 25;
-            fence.Height = 25;
-
-            //MapIcon MapIcon1 = new MapIcon();
-            //MapIcon1.Title = "Space Needle";
-
-            var childObj = new Image {
-                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/point.png"))
-            };
-
-            MapControl.SetLocation(fence, point);
-            MapControl.SetNormalizedAnchorPoint(fence, new Point(0.5, 0.5));
-
-            RouteMapControl.Children.Add(fence);
-
-            
-
-            //MapIcon MapIcon1 = new MapIcon();
-            //MapIcon1.Location = point;
-
-            //MapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            //MapIcon1.Title = "Space Needle";
-            //MapControl1.MapElements.Add(MapIcon1);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

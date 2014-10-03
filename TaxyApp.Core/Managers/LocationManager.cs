@@ -27,11 +27,15 @@ namespace TaxyApp.Core.Managers
         public LocationManager()
         {
             this.LocationReady = false;
-            this.Init();
+            //this.Init();
         }
 
         public async void Init()
         {
+            this.LocationReady = false;
+
+            NotifyPropertyChanged("LocationReady");
+
             Geopoint currentGeopoint = await this.GetCurrentGeopoint();
 
             MapLocationFinderResult result = null;

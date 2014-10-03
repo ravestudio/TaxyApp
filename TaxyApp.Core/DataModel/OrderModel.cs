@@ -75,7 +75,9 @@ namespace TaxyApp.Core.DataModel
             if (geopoints.Count() > 1)
             {
 
-                Windows.Services.Maps.MapRouteFinderResult routeResult = await locationMG.GetRoute(geopoints);
+                Task<Windows.Services.Maps.MapRouteFinderResult> routTask = locationMG.GetRoute(geopoints);
+
+                Windows.Services.Maps.MapRouteFinderResult routeResult = await routTask;
 
                 if (routeResult.Status == Windows.Services.Maps.MapRouteFinderStatus.Success)
                 {
@@ -98,11 +100,52 @@ namespace TaxyApp.Core.DataModel
             }
         }
 
-        public async Task<List<KeyValuePair<string, string>>> ConverToKeyValue()
+        public async void ShowMyPossitionAsync()
+        {
+            TaxyApp.Core.Managers.LocationManager locationMG = TaxyApp.Core.Managers.ManagerFactory.Instance.GetLocationManager();
+
+            Geopoint myGeopoint = await locationMG.GetCurrentGeopoint();
+
+            this.RouteMapControl.Center = myGeopoint;
+
+            this.RouteMapControl.ZoomLevel = 12;
+            this.RouteMapControl.LandmarksVisible = true;
+
+            AddMapIcon(myGeopoint);
+        }
+
+        private void AddMapIcon(Geopoint point)
+        {
+            Windows.UI.Xaml.Shapes.Ellipse fence = new Windows.UI.Xaml.Shapes.Ellipse();
+            fence.Fill = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 50, 120, 90));
+
+            fence.Width = 25;
+            fence.Height = 25;
+
+            //MapIcon MapIcon1 = new MapIcon();
+            //MapIcon1.Title = "Space Needle";
+
+            var childObj = new Windows.UI.Xaml.Controls.Image
+            {
+                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/point.png"))
+            };
+
+            Windows.UI.Xaml.Controls.Maps.MapControl.SetLocation(fence, point);
+            Windows.UI.Xaml.Controls.Maps.MapControl.SetNormalizedAnchorPoint(fence, new Windows.Foundation.Point(0.5, 0.5));
+
+            RouteMapControl.Children.Add(fence);
+        }
+
+        public List<KeyValuePair<string, string>> ConverToKeyValue()
         {
             List<KeyValuePair<string, string>> keyValueData = new List<KeyValuePair<string, string>>();
 
-            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
+            //keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
+
+            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-MM-dd hh:mm")));
+
+            //keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
+            //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
 
             int i = 0;
             foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
@@ -117,7 +160,11 @@ namespace TaxyApp.Core.DataModel
                         )));
 
                 keyValueData.Add(new KeyValuePair<string, string>
-                    (string.Format("coords[{0}]",i), string.Format("{0} {1}", orderPoint.Location.Point.Position.Latitude, orderPoint.Location.Point.Position.Longitude)));
+                    (string.Format("coords[{0}]", i), string.Format("{0} {1}",
+                    //orderPoint.Location.Point.Position.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    //orderPoint.Location.Point.Position.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))));
+                    orderPoint.Location.Point.Position.Latitude,
+                    orderPoint.Location.Point.Position.Longitude)));
 
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("priority[{0}]",i), orderPoint.Priority.ToString()));
@@ -125,21 +172,10 @@ namespace TaxyApp.Core.DataModel
                 i++;
             }
 
-            //keyValueData.Add(new KeyValuePair<string, string>("service","1"));
-            //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "1"));
-
-            Managers.LocationManager locationMG = Managers.ManagerFactory.Instance.GetLocationManager();
-
-            IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
-                .OrderBy(p => p.Priority)
-                .Select(p => p.Location.Point);
-
-            Windows.Services.Maps.MapRouteFinderResult routeResult = await locationMG.GetRoute(geopoints);
-
-            if (routeResult.Status == Windows.Services.Maps.MapRouteFinderStatus.Success)
+            if (this.MapRoute != null)
             {
-                keyValueData.Add(new KeyValuePair<string, string>("routemeters", routeResult.Route.LengthInMeters.ToString()));
-                keyValueData.Add(new KeyValuePair<string, string>("routetime", routeResult.Route.EstimatedDuration.Minutes.ToString()));
+                keyValueData.Add(new KeyValuePair<string, string>("routemeters", this.MapRoute.LengthInMeters.ToString()));
+                keyValueData.Add(new KeyValuePair<string, string>("routetime", this.MapRoute.EstimatedDuration.Minutes.ToString()));
             }
 
             return keyValueData;

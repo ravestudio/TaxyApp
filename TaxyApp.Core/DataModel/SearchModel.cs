@@ -37,6 +37,8 @@ namespace TaxyApp.Core.DataModel
 
             this.locationMg.PropertyChanged += locationMg_PropertyChanged;
 
+            this.locationMg.Init();
+
             this._searchText = string.Empty;
 
             this.Locations = new System.Collections.ObjectModel.ObservableCollection<LocationItem>();
@@ -89,11 +91,13 @@ namespace TaxyApp.Core.DataModel
 
             MapLocationFinderResult SearchResults = await this.locationMg.GetLocations(hintPoint, searchQuery);
 
-            lock (this.thisLock)
-            {
-                this.FillLocations(SearchResults);
+            //lock (this.thisLock)
+            //{
+            //    this.FillLocations(SearchResults);
 
-            }
+            //}
+
+            this.FillLocations(SearchResults);
         }
 
         private void FillLocations(MapLocationFinderResult SearchResults)
@@ -119,20 +123,6 @@ namespace TaxyApp.Core.DataModel
                 PropertyChanged(this,
                     new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
-        }
-    }
-
-    public class LocationDS
-    {
-        public List<LocationItem> Locations { get; set; }
-
-        public LocationDS()
-        {
-            this.Locations = new List<LocationItem>();
-
-            this.Locations.Add(new LocationItem() { Address = "Жуковского" });
-            this.Locations.Add(new LocationItem() { Address = "Ленина" });
-            this.Locations.Add(new LocationItem() { Address = "Маяковского" });
         }
     }
 

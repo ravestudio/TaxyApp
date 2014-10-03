@@ -30,7 +30,7 @@ namespace TaxyApp.Controller
         {
             TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
 
-            var postData = await this.OrderModel.ConverToKeyValue();
+            var postData = this.OrderModel.ConverToKeyValue();
 
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
 

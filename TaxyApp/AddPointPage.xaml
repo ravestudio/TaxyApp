@@ -14,9 +14,6 @@
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Page.Resources>
-        <taxyModel:LocationDS x:Key="LocationDS" />
-    </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
 
@@ -53,7 +50,6 @@
 
                 <ListView
                     ItemsSource="{Binding SearchModel.Locations}"
-                    d:DataContext="{Binding Source={StaticResource LocationDS}}"
                     VerticalAlignment="Top" HorizontalAlignment="Stretch"
                     IsItemClickEnabled="True">
 
