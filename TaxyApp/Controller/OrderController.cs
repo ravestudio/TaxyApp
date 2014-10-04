@@ -32,16 +32,17 @@ namespace TaxyApp.Controller
 
             var postData = this.OrderModel.ConverToKeyValue();
 
-            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
+            //var postData = new List<KeyValuePair<string, string>>();
 
-            string url = "http://serv.giddix.ru/api/passenger_setorder/";
-
-
-            
             postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
 
+
+
+            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
+
+            string url = "http://serv.giddix.ru/api/passenger_setorder/";
 
             string data = await client.GetData(url, postData);
         }

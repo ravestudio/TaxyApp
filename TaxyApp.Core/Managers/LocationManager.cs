@@ -9,7 +9,7 @@ using Windows.Services.Maps;
 
 namespace TaxyApp.Core.Managers
 {
-    public class LocationManager : System.ComponentModel.INotifyPropertyChanged
+    public class LocationManager
     {
 
         private Geolocator locator = new Geolocator();
@@ -30,17 +30,24 @@ namespace TaxyApp.Core.Managers
             //this.Init();
         }
 
-        public async void Init()
+        public async Task InitCurrentLocation()
         {
             this.LocationReady = false;
 
-            NotifyPropertyChanged("LocationReady");
+            Geopoint currentGeopoint = null;
 
-            Geopoint currentGeopoint = await this.GetCurrentGeopoint();
+            Task<Geopoint> task = this.GetCurrentGeopoint();
+            currentGeopoint = await task;
 
             MapLocationFinderResult result = null;
 
-            result = await MapLocationFinder.FindLocationsAtAsync(currentGeopoint);
+            Windows.Foundation.IAsyncOperation<MapLocationFinderResult> findLocationTask = null;
+
+            
+            
+            findLocationTask = MapLocationFinder.FindLocationsAtAsync(currentGeopoint);
+            result = await findLocationTask;
+            
 
             if (result.Status == MapLocationFinderStatus.Success)
             {
@@ -48,17 +55,19 @@ namespace TaxyApp.Core.Managers
             }
 
             this.LocationReady = true;
-
-            NotifyPropertyChanged("LocationReady");
         }
 
 
 
         public async Task<Geopoint> GetCurrentGeopoint()
         {
+            Geoposition pos = null;
 
             //locator.DesiredAccuracy = PositionAccuracy.High;
-            Geoposition pos = await locator.GetGeopositionAsync();
+            
+            Windows.Foundation.IAsyncOperation<Geoposition> task = locator.GetGeopositionAsync();
+
+            pos = await locator.GetGeopositionAsync();
 
             Geopoint myGeopoint = new Geopoint(new BasicGeoposition()
             {
@@ -93,15 +102,5 @@ namespace TaxyApp.Core.Managers
             return routeResult;
         }
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this,
-                    new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

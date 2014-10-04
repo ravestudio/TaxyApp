@@ -104,7 +104,7 @@ namespace TaxyApp
         /// событий, которые не могут отменить запрос навигации.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.DefaultViewModel.OrderModel.ShowMyPossitionAsync();
+            //this.DefaultViewModel.OrderModel.ShowMyPossitionAsync();
 
             this.navigationHelper.OnNavigatedTo(e);
         }

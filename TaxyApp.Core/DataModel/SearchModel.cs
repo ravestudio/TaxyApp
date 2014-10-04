@@ -19,6 +19,8 @@ namespace TaxyApp.Core.DataModel
 
         public LocationItem SelectedLocation { get; set; }
 
+        public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
+
         public bool LocationReady
         {
             get
@@ -29,27 +31,25 @@ namespace TaxyApp.Core.DataModel
 
         public SearchModel()
         {
-            this.search_cmd = new SearchCommand(this);
+            int thread = Environment.CurrentManagedThreadId;
 
-            //this.locationMg = new Managers.LocationManager();
+            this.search_cmd = new SearchCommand(this);
 
             this.locationMg = Managers.ManagerFactory.Instance.GetLocationManager();
 
-            this.locationMg.PropertyChanged += locationMg_PropertyChanged;
 
-            this.locationMg.Init();
+            Task initTask = this.locationMg.InitCurrentLocation().ContinueWith((task) =>
+                {
+                    if (task.Exception == null)
+                    {
+                        this.NotifyPropertyChanged("LocationReady");
+                    }
+
+                });
 
             this._searchText = string.Empty;
 
             this.Locations = new System.Collections.ObjectModel.ObservableCollection<LocationItem>();
-        }
-
-        void locationMg_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "LocationReady")
-            {
-                NotifyPropertyChanged("LocationReady");
-            }
         }
 
         public string SearchText {
@@ -120,8 +120,11 @@ namespace TaxyApp.Core.DataModel
         {
             if (PropertyChanged != null)
             {
-                PropertyChanged(this,
-                    new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+                Windows.Foundation.IAsyncAction action =
+                this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+                });
             }
         }
     }

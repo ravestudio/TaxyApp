@@ -35,6 +35,8 @@ namespace TaxyApp
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            this.orderController.SearchModel.Dispatcher = this.Dispatcher;
         }
 
         /// <summary>

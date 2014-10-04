@@ -51,7 +51,7 @@ namespace TaxyApp.Core.DataModel
 
         public void UpdatePoints()
         {
-            this.UpdateRoute();
+            Task<Windows.Services.Maps.MapRoute> FindRouteTask = this.FindRoute();
 
             if (this._orderPointList.Count == this._orderPointList.Where(p => p.IsDataReady()).Count())
             {
@@ -62,10 +62,28 @@ namespace TaxyApp.Core.DataModel
 
                 this._orderPointList.Add(newPoint);
             }
+
+            FindRouteTask.ContinueWith(t =>
+                {
+                    if (t.Exception != null)
+                    {
+                        string msg = t.Exception.Message;
+                    }
+                    else
+                    {
+                        this.MapRoute = t.Result;
+                        string res = "ok";
+                    }
+                }
+            );
         }
 
-        public async void UpdateRoute()
+        public async Task<Windows.Services.Maps.MapRoute> FindRoute()
         {
+            Windows.Services.Maps.MapRoute route = null;
+
+            int thread = Environment.CurrentManagedThreadId;
+
             Managers.LocationManager locationMG = Managers.ManagerFactory.Instance.GetLocationManager();
 
             IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
@@ -74,30 +92,36 @@ namespace TaxyApp.Core.DataModel
 
             if (geopoints.Count() > 1)
             {
+                Windows.Services.Maps.MapRouteFinderResult routeResult = null;
+                Task<Windows.Services.Maps.MapRouteFinderResult> routeTask = locationMG.GetRoute(geopoints);
 
-                Task<Windows.Services.Maps.MapRouteFinderResult> routTask = locationMG.GetRoute(geopoints);
-
-                Windows.Services.Maps.MapRouteFinderResult routeResult = await routTask;
+                routeResult = await routeTask;
 
                 if (routeResult.Status == Windows.Services.Maps.MapRouteFinderStatus.Success)
                 {
-                    this.MapRoute = routeResult.Route;
-
-                    Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
-                    viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
-                    viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
-
-                    // Add the new MapRouteView to the Routes collection
-                    // of the MapControl.
-                    this.RouteMapControl.Routes.Add(viewOfRoute);
-
-                    // Fit the MapControl to the route.
-                    await this.RouteMapControl.TrySetViewBoundsAsync(
-                        this.MapRoute.BoundingBox,
-                        null,
-                        Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                    route = routeResult.Route;
                 }
+
             }
+
+            return route;
+        }
+
+        public async Task ShowRoute()
+        {
+            Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
+            viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
+            viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
+
+            // Add the new MapRouteView to the Routes collection
+            // of the MapControl.
+            this.RouteMapControl.Routes.Add(viewOfRoute);
+
+            // Fit the MapControl to the route.
+            await this.RouteMapControl.TrySetViewBoundsAsync(
+                this.MapRoute.BoundingBox,
+                null,
+                Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
         }
 
         public async void ShowMyPossitionAsync()
@@ -140,12 +164,12 @@ namespace TaxyApp.Core.DataModel
         {
             List<KeyValuePair<string, string>> keyValueData = new List<KeyValuePair<string, string>>();
 
-            //keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
+            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
 
-            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-MM-dd hh:mm")));
+            //keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-MM-dd")));
 
-            //keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
-            //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
+            keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
+            keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
 
             int i = 0;
             foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
@@ -160,11 +184,9 @@ namespace TaxyApp.Core.DataModel
                         )));
 
                 keyValueData.Add(new KeyValuePair<string, string>
-                    (string.Format("coords[{0}]", i), string.Format("{0} {1}",
-                    //orderPoint.Location.Point.Position.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                    //orderPoint.Location.Point.Position.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))));
-                    orderPoint.Location.Point.Position.Latitude,
-                    orderPoint.Location.Point.Position.Longitude)));
+                    (string.Format("coords[{0}]", i), string.Format("{0},{1}",
+                    orderPoint.Location.Point.Position.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    orderPoint.Location.Point.Position.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))));
 
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("priority[{0}]",i), orderPoint.Priority.ToString()));
