@@ -15,6 +15,8 @@ namespace TaxyApp.Core.DataModel
     {
         private ObservableCollection<OrderPoint> _orderPointList = null;
 
+        public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
+
         public OrderModel()
         {
             this._orderPointList = new ObservableCollection<OrderPoint>();
@@ -23,23 +25,47 @@ namespace TaxyApp.Core.DataModel
             pointfrom.Priority = 0;
             pointfrom.Location = new LocationItem() {  Address = string.Empty};
 
-            //OrderPoint point1 = new OrderPoint();
-            //point1.Priority = 1;
-            //point1.Location = new LocationItem() { Address = "Омск, Маркса 89" };
-
-            //OrderPoint point2 = new OrderPoint();
-            //point2.Priority = 2;
-            //point2.Location = new LocationItem() { Address = "Омск, Учебная 83" };
-
-            //this._orderPointList.Add(pointfrom);
-            //this._orderPointList.Add(point1);
-            //this._orderPointList.Add(point2);
-
             this._orderPointList.Add(pointfrom);
+
+            this.MapRouteChanged += OrderModel_MapRouteChanged;
+        }
+
+        void OrderModel_MapRouteChanged(object sender, EventArgs e)
+        {
+            int thread = Environment.CurrentManagedThreadId;
+
+            Task showRoutTask = this.ShowRoute().ContinueWith(t =>
+                {
+                    string msg = "route showed";
+                });
+
         }
 
         public Windows.UI.Xaml.Controls.Maps.MapControl RouteMapControl { get; set; }
-        public Windows.Services.Maps.MapRoute MapRoute { get; set; }
+
+        private Windows.Services.Maps.MapRoute mapRoute = null;
+        public Windows.Services.Maps.MapRoute MapRoute
+        {
+            get
+            { return this.mapRoute; }
+            set
+            {
+                this.mapRoute = value;
+
+                NotifyMapRouteChanged();
+            }
+        }
+
+        public event EventHandler MapRouteChanged;
+
+        public void NotifyMapRouteChanged()
+        {
+            if (MapRouteChanged != null)
+            {
+                EventArgs args = new EventArgs();
+                MapRouteChanged(this, args);
+            }
+        }
 
         public ObservableCollection<OrderPoint> OrderPointList
         {
@@ -72,7 +98,6 @@ namespace TaxyApp.Core.DataModel
                     else
                     {
                         this.MapRoute = t.Result;
-                        string res = "ok";
                     }
                 }
             );
@@ -109,22 +134,33 @@ namespace TaxyApp.Core.DataModel
 
         public async Task ShowRoute()
         {
-            Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
-            viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
-            viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
+            if (this.MapRoute != null)
+            {
+                int thread = Environment.CurrentManagedThreadId;
 
-            // Add the new MapRouteView to the Routes collection
-            // of the MapControl.
-            this.RouteMapControl.Routes.Add(viewOfRoute);
+                Windows.Foundation.IAsyncAction action =
+                this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
+                    viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
+                    viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
 
-            // Fit the MapControl to the route.
-            await this.RouteMapControl.TrySetViewBoundsAsync(
-                this.MapRoute.BoundingBox,
-                null,
-                Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                    // Add the new MapRouteView to the Routes collection
+                    // of the MapControl.
+                    this.RouteMapControl.Routes.Add(viewOfRoute);
+
+                    // Fit the MapControl to the route.
+                    await this.RouteMapControl.TrySetViewBoundsAsync(
+                        this.MapRoute.BoundingBox,
+                        null,
+                        Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+                });
+
+                await action;
+            }
         }
 
-        public async void ShowMyPossitionAsync()
+        public async Task ShowMyPossitionAsync()
         {
             TaxyApp.Core.Managers.LocationManager locationMG = TaxyApp.Core.Managers.ManagerFactory.Instance.GetLocationManager();
 
@@ -143,8 +179,8 @@ namespace TaxyApp.Core.DataModel
             Windows.UI.Xaml.Shapes.Ellipse fence = new Windows.UI.Xaml.Shapes.Ellipse();
             fence.Fill = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 50, 120, 90));
 
-            fence.Width = 25;
-            fence.Height = 25;
+            fence.Width = 15;
+            fence.Height = 15;
 
             //MapIcon MapIcon1 = new MapIcon();
             //MapIcon1.Title = "Space Needle";

@@ -66,15 +66,18 @@
                         </Style>
                     </ListView.ItemContainerStyle>
 
-                    <ListView.ItemTemplate> 
+                    <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Grid.Column="1" Margin="0,10,0,0" Background="#FF1A1570">
+                            <StackPanel Grid.Column="1" Margin="0,10,0,0">
+                                <StackPanel.Background>
+                                    <SolidColorBrush Color="{ThemeResource PhoneBaseMediumMidColor}"/>
+                                </StackPanel.Background>
                                 <TextBlock Text="{Binding Address}" Style="{ThemeResource TitleTextBlockStyle}" Margin="5,15"></TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                
+
             </StackPanel>
         </Grid>
     </Grid>

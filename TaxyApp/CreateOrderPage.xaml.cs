@@ -41,6 +41,8 @@ namespace TaxyApp
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            this.orderController.OrderModel.Dispatcher = this.Dispatcher;
         }
 
         /// <summary>
@@ -104,7 +106,11 @@ namespace TaxyApp
         /// событий, которые не могут отменить запрос навигации.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //this.DefaultViewModel.OrderModel.ShowMyPossitionAsync();
+            this.DefaultViewModel.OrderModel.ShowMyPossitionAsync().
+                ContinueWith(
+                t => {
+                    string status = "showed";
+                });
 
             this.navigationHelper.OnNavigatedTo(e);
         }

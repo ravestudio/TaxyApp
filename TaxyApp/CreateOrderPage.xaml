@@ -2,6 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TaxyApp"
+    xmlns:viewModel="using:TaxyApp.Core.DataModel"
+    xmlns:controller="using:TaxyApp.Controller"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
@@ -10,6 +12,7 @@
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    d:DataContext="{Binding Source={d:DesignData Source=../TaxyApp.Core/DataModel/OrderData.json, Type=controller:OrderController}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     
@@ -19,7 +22,8 @@
             
             <PivotItem
                 x:Uid="PivotRoute"
-                Header="Route">
+                Header="Route"
+                >
                 
             
                 <!--Панель заголовка-->
@@ -64,7 +68,7 @@
 
             <PivotItem
                 x:Uid="PivotMap"
-                Header="Map">
+                Header="Map" Margin="0,0">
                 <Maps:MapControl x:Name="RouteMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </PivotItem>
         </Pivot>
