@@ -79,6 +79,32 @@ namespace TaxyApp.Core.DataModel
         {
             Task<Windows.Services.Maps.MapRoute> FindRouteTask = this.FindRoute();
 
+            FindRouteTask.ContinueWith(t =>
+            {
+                if (t.Status == TaskStatus.RanToCompletion)
+                {
+                    
+                    this.MapRoute = t.Result;
+
+                    Windows.Foundation.IAsyncAction action =
+                    this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        var dlg = new Windows.UI.Popups.MessageDialog("Маршрут найден");
+                        dlg.ShowAsync();
+                    });
+                }
+                else
+                {
+
+                    Windows.Foundation.IAsyncAction action =
+                    this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        var dlg = new Windows.UI.Popups.MessageDialog("Ошибка при поиске маршрута");
+                        dlg.ShowAsync();
+                    });
+                }
+            });
+
             if (this._orderPointList.Count == this._orderPointList.Where(p => p.IsDataReady()).Count())
             {
                 OrderPoint newPoint = new OrderPoint();
@@ -88,19 +114,6 @@ namespace TaxyApp.Core.DataModel
 
                 this._orderPointList.Add(newPoint);
             }
-
-            FindRouteTask.ContinueWith(t =>
-                {
-                    if (t.Exception != null)
-                    {
-                        string msg = t.Exception.Message;
-                    }
-                    else
-                    {
-                        this.MapRoute = t.Result;
-                    }
-                }
-            );
         }
 
         public async Task<Windows.Services.Maps.MapRoute> FindRoute()
