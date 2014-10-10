@@ -50,9 +50,10 @@ namespace TaxyApp.Controller
         public async void GetUserOrders()
         {
 
-            string url = "http://serv.giddix.ruapi/passenger_getmyorders/";
+            string url = "http://serv.giddix.ru/api/passenger_getmyorders/";
 
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
+            
 
             TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
 
@@ -63,6 +64,30 @@ namespace TaxyApp.Controller
 
 
             string data = await client.GetData(url, postData);
+
+            var jsonObj = Windows.Data.Json.JsonValue.Parse(data).GetObject();
+
+            try
+            {
+                var resp = jsonObj["response"];
+
+                var orderArray = resp.GetArray();
+
+                var ord = orderArray[0].GetObject();
+
+                var routeArray = ord["routes"].GetArray();
+
+                var addr = routeArray[0].GetObject()["address"].GetString();
+
+
+            }
+            catch(Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            //var resp = jsonObj["response"].GetObject();
+            //var order =resp["0"].GetObject();
+            //var rout = order["routes"].GetObject()["0"].GetObject()["address"].ToString();
         }
     }
 

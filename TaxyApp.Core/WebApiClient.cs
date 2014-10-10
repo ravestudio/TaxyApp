@@ -19,7 +19,6 @@ namespace TaxyApp.Core
 
             var uri = new Uri(url);
             System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
-
             System.Net.Http.HttpContent content = new System.Net.Http.FormUrlEncodedContent(data);
 
             //httpClient.PostAsync(uri, content);
@@ -32,9 +31,9 @@ namespace TaxyApp.Core
 
                 text = await response.Content.ReadAsStringAsync();
             }
-            catch
+            catch(Exception ex)
             {
-
+                string msg = ex.Message;
             }
 
             return text;

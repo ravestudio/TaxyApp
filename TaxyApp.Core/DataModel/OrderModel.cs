@@ -213,24 +213,30 @@ namespace TaxyApp.Core.DataModel
         {
             List<KeyValuePair<string, string>> keyValueData = new List<KeyValuePair<string, string>>();
 
-            keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
+            //keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-mm-dd hh:mm")));
 
             //keyValueData.Add(new KeyValuePair<string, string>("enddate", System.DateTime.Now.AddHours(1).ToString("yyyy-MM-dd")));
 
-            keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
-            keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
+            //keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
+            //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
 
             int i = 0;
             foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
             {
-                keyValueData.Add(new KeyValuePair<string, string>
-                    (string.Format("address[{0}]",i),
+                string addr = 
                         string.Format("{0}, {1}, {2} {3}",
                         orderPoint.Location.MapLocation.Address.Country,
                         orderPoint.Location.MapLocation.Address.Town,
                         orderPoint.Location.MapLocation.Address.Street,
                         orderPoint.Location.MapLocation.Address.StreetNumber
-                        )));
+                        );
+
+                //var utf8 = System.Text.Encoding.UTF8;
+                //byte[] utfBytes = utf8.GetBytes(addr);
+                //addr = utf8.GetString(utfBytes, 0, utfBytes.Length);
+
+                keyValueData.Add(new KeyValuePair<string, string>
+                    (string.Format("address[{0}]",i),addr));
 
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("coords[{0}]", i), string.Format("{0},{1}",

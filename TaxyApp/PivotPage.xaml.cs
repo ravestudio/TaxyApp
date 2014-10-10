@@ -172,7 +172,9 @@ namespace TaxyApp
 
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
 
+            
             string url = "http://serv.giddix.ru/api/passenger_auth/";
+            //string url = "http://taxyserver.azurewebsites.net/api/user/passenger_auth";
 
             var postData = new List<KeyValuePair<string, string>>();
 
