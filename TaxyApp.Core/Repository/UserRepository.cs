@@ -27,7 +27,9 @@ namespace TaxyApp.Core.Repository
 
             string data = await this._apiClient.GetData(url, postData);
 
-            TaxyApp.Core.Entities.User user = this._apiClient.GetObject<TaxyApp.Core.Entities.User>(data);
+            var userValue =  Windows.Data.Json.JsonValue.Parse(data);
+
+            TaxyApp.Core.Entities.User user = this.GetObject(userValue);
 
             return user;
         }

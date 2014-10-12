@@ -50,45 +50,13 @@ namespace TaxyApp.Controller
 
         public async void GetUserOrders()
         {
-
-            string url = "http://serv.giddix.ru/api/passenger_getmyorders/";
-
-            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
-            
+            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();       
 
             TaxyApp.Core.Entities.User user = TaxyApp.Core.Session.Instance.GetUser();
 
-            var postData = new List<KeyValuePair<string, string>>();
+            TaxyApp.Core.Repository.OrderRepository orderRepository = new Core.Repository.OrderRepository(client);
 
-            postData.Add(new KeyValuePair<string, string>("passengerid", user.Id.ToString()));
-            postData.Add(new KeyValuePair<string, string>("token", user.token));
-
-
-            string data = await client.GetData(url, postData);
-
-            var jsonObj = Windows.Data.Json.JsonValue.Parse(data).GetObject();
-
-            try
-            {
-                var resp = jsonObj["response"];
-
-                var orderArray = resp.GetArray();
-
-                var ord = orderArray[0].GetObject();
-
-                var routeArray = ord["routes"].GetArray();
-
-                var addr = routeArray[0].GetObject()["address"].GetString();
-
-
-            }
-            catch(Exception ex)
-            {
-                string msg = ex.Message;
-            }
-            //var resp = jsonObj["response"].GetObject();
-            //var order =resp["0"].GetObject();
-            //var rout = order["routes"].GetObject()["0"].GetObject()["address"].ToString();
+            IList<TaxyApp.Core.Entities.Order> orderList = await orderRepository.GetUserOrders(user);
         }
     }
 

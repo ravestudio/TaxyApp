@@ -39,18 +39,5 @@ namespace TaxyApp.Core
             return text;
         }
 
-        public T GetObject<T>(string jsonStr)
-            where T : class, Entities.IEntity, new()
-        {
-            T obj = null;
-
-            var jsonObj = Windows.Data.Json.JsonValue.Parse(jsonStr).GetObject();
-
-            obj = new T();
-            obj.ReadData(jsonObj);
-
-            return obj;
-        }
-
     }
 }
