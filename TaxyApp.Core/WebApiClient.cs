@@ -40,7 +40,7 @@ namespace TaxyApp.Core
         }
 
         public T GetObject<T>(string jsonStr)
-            where T : DataModel.Entity, new()
+            where T : class, Entities.IEntity, new()
         {
             T obj = null;
 

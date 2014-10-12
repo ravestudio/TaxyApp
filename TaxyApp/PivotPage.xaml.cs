@@ -172,21 +172,9 @@ namespace TaxyApp
 
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
 
-            
-            string url = "http://serv.giddix.ru/api/passenger_auth/";
-            //string url = "http://taxyserver.azurewebsites.net/api/user/passenger_auth";
+            TaxyApp.Core.Repository.UserRepository userRepository = new Core.Repository.UserRepository(client);
 
-            var postData = new List<KeyValuePair<string, string>>();
-
-            postData.Add(new KeyValuePair<string, string>("phone", model.PhoneNumber));
-            postData.Add(new KeyValuePair<string, string>("pin", model.PIN));
-            postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
-
-            //string data = string.Format("phone={0}&pin={1}&idcompany={2}", model.PhoneNumber, model.PIN, 1);
-
-            string data = await client.GetData(url, postData);
-
-            TaxyApp.Core.DataModel.User user = client.GetObject<TaxyApp.Core.DataModel.User>(data);
+            TaxyApp.Core.Entities.User user = await userRepository.GetUser(model.PhoneNumber, model.PIN);
 
             TaxyApp.Core.Session.Instance.SetUSer(user);
         }

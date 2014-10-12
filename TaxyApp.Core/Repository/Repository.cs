@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 
 namespace TaxyApp.Core.Repository
 {
-    public class Repository<G>
-        where G : class
+    public class Repository<G, Key>
+        where G : Entities.Entity<Key>
     {
-        public virtual G GetById(int id)
+
+        protected TaxyApp.Core.WebApiClient _apiClient = null;
+
+        public Repository(TaxyApp.Core.WebApiClient apiClient)
+        {
+            this._apiClient = apiClient;
+        }
+
+        public virtual G GetById(Key id)
         {
             return null;
         }

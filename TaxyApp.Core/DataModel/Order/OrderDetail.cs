@@ -5,19 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 
 using Windows.Devices.Geolocation;
 
-namespace TaxyApp.Core.DataModel
+namespace TaxyApp.Core.DataModel.Order
 {
-    public class OrderModel
+    public class OrderDetail
     {
         private ObservableCollection<OrderPoint> _orderPointList = null;
 
         public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
 
-        public OrderModel()
+        public OrderDetail()
         {
             this._orderPointList = new ObservableCollection<OrderPoint>();
 
@@ -258,46 +257,4 @@ namespace TaxyApp.Core.DataModel
             return keyValueData;
         }
     }
-
-    public class OrderPoint
-    {
-
-        public int Priority { get; set; }
-        public LocationItem Location { get; set; }
-
-        public OrderPoint()
-        {
-
-        }
-
-        public string PointTitle
-        {
-            get
-            {
-                return this.GetPointTitle();
-            }
-        }
-
-        public string GetPointTitle()
-        {
-            string res = string.Empty;
-
-            if (this.Priority == 0)
-            {
-                res = "From";
-            }
-            else
-            {
-                res = string.Format("Point {0}", this.Priority);
-            }
-
-            return res;
-        }
-
-        public bool IsDataReady()
-        {
-            return (this.Location != null && !string.IsNullOrEmpty(this.Location.Address));
-        }
-    }
-
 }

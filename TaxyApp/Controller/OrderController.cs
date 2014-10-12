@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaxyApp.Core.DataModel;
+using TaxyApp.Core.DataModel.Order;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -12,14 +13,14 @@ namespace TaxyApp.Controller
 {
     public class OrderController
     {
-        public OrderModel OrderModel { get; set; }
+        public OrderDetail OrderModel { get; set; }
         public SearchModel SearchModel { get; set; }
         public SetLocationCommand SetLocation { get; set; }
         public SelectItemCommand SelectItem { get; set; }
 
         public OrderController()
         {
-            this.OrderModel = new OrderModel();
+            this.OrderModel = new OrderDetail();
             this.SearchModel = new SearchModel();
 
             this.SetLocation = new SetLocationCommand(this);
@@ -28,13 +29,13 @@ namespace TaxyApp.Controller
 
         public async void CreateOrder()
         {
-            TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
+            TaxyApp.Core.Entities.User user = TaxyApp.Core.Session.Instance.GetUser();
 
             var postData = this.OrderModel.ConverToKeyValue();
 
             //var postData = new List<KeyValuePair<string, string>>();
 
-            postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
+            postData.Add(new KeyValuePair<string, string>("passengerid", user.Id.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
 
@@ -55,11 +56,11 @@ namespace TaxyApp.Controller
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
             
 
-            TaxyApp.Core.DataModel.User user = TaxyApp.Core.Session.Instance.GetUser();
+            TaxyApp.Core.Entities.User user = TaxyApp.Core.Session.Instance.GetUser();
 
             var postData = new List<KeyValuePair<string, string>>();
 
-            postData.Add(new KeyValuePair<string, string>("passengerid", user.passengerid.ToString()));
+            postData.Add(new KeyValuePair<string, string>("passengerid", user.Id.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
 
 
@@ -110,7 +111,7 @@ namespace TaxyApp.Controller
         {
             Windows.UI.Xaml.Controls.ItemClickEventArgs e = (Windows.UI.Xaml.Controls.ItemClickEventArgs)parameter;
 
-            TaxyApp.Core.DataModel.OrderPoint orderPoint = (TaxyApp.Core.DataModel.OrderPoint)e.ClickedItem;
+            TaxyApp.Core.DataModel.Order.OrderPoint orderPoint = (TaxyApp.Core.DataModel.Order.OrderPoint)e.ClickedItem;
 
 
             Frame rootFrame = Window.Current.Content as Frame;

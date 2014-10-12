@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace TaxyApp.Core.Repository
 {
-    public class OrderRepository : Repository<DataModel.OrderModel>
+    public class OrderRepository : Repository<Entities.Order, int>
     {
-        public override void Create(DataModel.OrderModel model)
+        public OrderRepository(TaxyApp.Core.WebApiClient apiClient): base(apiClient)
         {
-            base.Create(model);
+
+        }
+
+        public override void Create(Entities.Order order)
+        {
+            base.Create(order);
         }
     }
 }

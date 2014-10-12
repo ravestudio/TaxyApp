@@ -8,14 +8,14 @@ namespace TaxyApp.Core
 {
     public class Session : Singleton<Session>
     {
-        private DataModel.User user = null;
+        private Entities.User user = null;
 
-        public DataModel.User GetUser()
+        public Entities.User GetUser()
         {
             return this.user;
         }
 
-        public void SetUSer(DataModel.User user)
+        public void SetUSer(Entities.User user)
         {
             this.user = user;
         }
