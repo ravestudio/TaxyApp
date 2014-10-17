@@ -155,6 +155,18 @@ namespace TaxyApp
         /// событий, которые не могут отменить запрос навигации.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            //if (TaxyApp.Core.Session.Instance.GetUser() == null)
+            //{
+            //    LoginDialog loginDlg = new LoginDialog();
+            //    loginDlg.ShowAsync();
+            //}
+            int thread = Environment.CurrentManagedThreadId;
+
+            if (this.Frame.BackStack.Count > 0 && this.Frame.BackStack[0].SourcePageType == typeof(AuthenticationPage))
+            {
+                this.Frame.BackStack.Clear();
+            }
+
             this.navigationHelper.OnNavigatedTo(e);
         }
 
@@ -164,20 +176,6 @@ namespace TaxyApp
         }
 
         #endregion
-
-        private async void LoginBtn_Click(object sender, RoutedEventArgs e)
-        {
-            DataModel.LoginModel model = new DataModel.LoginModel();
-
-
-            TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();
-
-            TaxyApp.Core.Repository.UserRepository userRepository = new Core.Repository.UserRepository(client);
-
-            TaxyApp.Core.Entities.User user = await userRepository.GetUser(model.PhoneNumber, model.PIN);
-
-            TaxyApp.Core.Session.Instance.SetUSer(user);
-        }
 
         private void CreateOrderBtn_Click(object sender, RoutedEventArgs e)
         {
