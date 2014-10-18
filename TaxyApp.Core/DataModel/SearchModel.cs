@@ -17,7 +17,7 @@ namespace TaxyApp.Core.DataModel
 
         private Object thisLock = new Object();
 
-        public LocationItem SelectedLocation { get; set; }
+        public Order.OrderPoint SelectedPoint { get; set; }
 
         public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
 
@@ -133,20 +133,29 @@ namespace TaxyApp.Core.DataModel
     {
         public LocationItem()
         {
-
+            this.Ready = false;
         }
 
         public LocationItem(MapLocation location)
         {
             this.Address = string.Format("{0}, {1} {2} {3}", location.Address.Town, location.Address.Street, location.Address.StreetNumber, location.Address.BuildingName);
 
-            this.Point = location.Point;
+            this.Latitude = location.Point.Position.Latitude;
+            this.Longitude = location.Point.Position.Longitude;
+
             this.MapLocation = location;
+
+            this.Ready = true;
         }
 
         public string Address { get; set; }
-        public Geopoint Point { get; set; }
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
         public MapLocation MapLocation { get; set; }
+
+        public bool Ready { get; set; }
 
     }
 

@@ -89,6 +89,7 @@
     <Compile Include="DataModel\SearchModel.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Order.cs" />
+    <Compile Include="Entities\OrderDS.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\ManagerFactory.cs" />
@@ -102,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DataModel\OrderData.json" />
+    <None Include="DataModel\OrderList.json" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -22,9 +22,14 @@ namespace TaxyApp.Core.DataModel.Order
 
             OrderPoint pointfrom = new OrderPoint();
             pointfrom.Priority = 0;
-            pointfrom.Location = new LocationItem() {  Address = string.Empty};
+            pointfrom.Location = new LocationItem() {  Address = "Input address"};
+
+            OrderPoint pointSecond = new OrderPoint();
+            pointSecond.Priority = 1;
+            pointSecond.Location = new LocationItem() { Address = "Input address" };
 
             this._orderPointList.Add(pointfrom);
+            this._orderPointList.Add(pointSecond);
 
             this.MapRouteChanged += OrderModel_MapRouteChanged;
         }
@@ -125,7 +130,11 @@ namespace TaxyApp.Core.DataModel.Order
 
             IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
                 .OrderBy(p => p.Priority)
-                .Select(p => p.Location.Point);
+                .Select(p => new Geopoint(new BasicGeoposition()
+                    {
+                        Latitude = p.Location.Latitude,
+                        Longitude = p.Location.Longitude
+                    }));
 
             if (geopoints.Count() > 1)
             {
@@ -239,8 +248,8 @@ namespace TaxyApp.Core.DataModel.Order
 
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("coords[{0}]", i), string.Format("{0},{1}",
-                    orderPoint.Location.Point.Position.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                    orderPoint.Location.Point.Position.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))));
+                    orderPoint.Location.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    orderPoint.Location.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture))));
 
                 keyValueData.Add(new KeyValuePair<string, string>
                     (string.Format("priority[{0}]",i), orderPoint.Priority.ToString()));

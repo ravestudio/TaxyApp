@@ -8,13 +8,33 @@ namespace TaxyApp.Core.Entities
 {
     public class Order: Entity<int>
     {
-        IList<OrderRouteItem> Route = new List<OrderRouteItem>();
+        public DateTime StartDate { get; set; }
+
+        public IList<OrderRouteItem> route = new List<OrderRouteItem>();
+
+        public IList<OrderRouteItem> Route
+        {
+            get
+            {
+                return this.route;
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                return string.Format("Order {0}", this.StartDate);
+            }
+        }
 
         public override void ReadData(Windows.Data.Json.JsonObject jsonObj)
         {
             var type = jsonObj["idorder"].ValueType;
 
             this.Id = (int)jsonObj["idorder"].GetNumber();
+
+            this.StartDate = DateTime.Parse(jsonObj["startdate"].GetString(), System.Globalization.CultureInfo.InvariantCulture);
 
             var routeArray = jsonObj["routes"].GetArray();
 
@@ -34,7 +54,7 @@ namespace TaxyApp.Core.Entities
                     Longitude = double.Parse(coordsArray[1], System.Globalization.CultureInfo.InvariantCulture)
                 };
 
-                this.Route.Add(routeItem);
+                this.route.Add(routeItem);
             }
 
             base.ReadData(jsonObj);

@@ -76,6 +76,9 @@ namespace TaxyApp
             // TODO: Создание соответствующей модели данных для области проблемы, чтобы заменить пример данных
             var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-1");
             this.DefaultViewModel[FirstGroupName] = sampleDataGroup;
+
+            IList<Core.Entities.Order> orderList = await Controller.ControllerFactory.Instance.GetOrderController().GetUserOrders();
+            this.DefaultViewModel["OrderList"] = orderList;
         }
 
         /// <summary>
@@ -182,9 +185,11 @@ namespace TaxyApp
             this.Frame.Navigate(typeof(CreateOrderPage)); 
         }
 
-        private void myOrderListBtn_Click(object sender, RoutedEventArgs e)
+        private async void myOrderListBtn_Click(object sender, RoutedEventArgs e)
         {
-            Controller.ControllerFactory.Instance.GetOrderController().GetUserOrders();
+            IList<Core.Entities.Order> orderList = await Controller.ControllerFactory.Instance.GetOrderController().GetUserOrders();
+
+            this.DefaultViewModel["OrderList"] = orderList;
         }
     }
 }

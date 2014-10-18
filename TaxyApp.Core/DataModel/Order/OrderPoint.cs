@@ -11,8 +11,15 @@ namespace TaxyApp.Core.DataModel.Order
         public int Priority { get; set; }
         public LocationItem Location { get; set; }
 
+        private IDictionary<int, string> orderString = null;
+
         public OrderPoint()
         {
+            orderString = new Dictionary<int, string>();
+            orderString.Add(0, "From");
+            orderString.Add(1, "Second");
+            orderString.Add(2, "Third");
+            orderString.Add(3, "Fourth ");
 
         }
 
@@ -28,21 +35,15 @@ namespace TaxyApp.Core.DataModel.Order
         {
             string res = string.Empty;
 
-            if (this.Priority == 0)
-            {
-                res = "From";
-            }
-            else
-            {
-                res = string.Format("Point {0}", this.Priority);
-            }
+            res = string.Format("{0} address",  this.orderString[this.Priority]);            
 
             return res;
         }
 
         public bool IsDataReady()
         {
-            return (this.Location != null && !string.IsNullOrEmpty(this.Location.Address));
+            bool ret = (this.Location != null && this.Location.Ready);
+            return ret;
         }
     }
 }

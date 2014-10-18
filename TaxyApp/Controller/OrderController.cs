@@ -48,7 +48,7 @@ namespace TaxyApp.Controller
             string data = await client.GetData(url, postData);
         }
 
-        public async void GetUserOrders()
+        public async Task<IList<TaxyApp.Core.Entities.Order>> GetUserOrders()
         {
             TaxyApp.Core.WebApiClient client = new TaxyApp.Core.WebApiClient();       
 
@@ -57,6 +57,8 @@ namespace TaxyApp.Controller
             TaxyApp.Core.Repository.OrderRepository orderRepository = new Core.Repository.OrderRepository(client);
 
             IList<TaxyApp.Core.Entities.Order> orderList = await orderRepository.GetUserOrders(user);
+
+            return orderList;
         }
     }
 
@@ -84,7 +86,7 @@ namespace TaxyApp.Controller
 
             Frame rootFrame = Window.Current.Content as Frame;
 
-            _controller.SearchModel.SelectedLocation = orderPoint.Location;
+            _controller.SearchModel.SelectedPoint = orderPoint;
 
             rootFrame.Navigate(typeof(AddPointPage));
 
@@ -111,12 +113,9 @@ namespace TaxyApp.Controller
         {
             Windows.UI.Xaml.Controls.ItemClickEventArgs e = (Windows.UI.Xaml.Controls.ItemClickEventArgs)parameter;
 
-
             LocationItem location = (LocationItem)e.ClickedItem;
 
-            _controller.SearchModel.SelectedLocation.Address = location.Address;
-            _controller.SearchModel.SelectedLocation.Point = location.Point;
-            _controller.SearchModel.SelectedLocation.MapLocation = location.MapLocation;
+            _controller.SearchModel.SelectedPoint.Location = location;
 
             Frame rootFrame = Window.Current.Content as Frame;
 

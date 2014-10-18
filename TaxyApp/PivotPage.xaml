@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:TaxyApp.Data"
+    xmlns:entity="using:TaxyApp.Core.Entities"
     mc:Ignorable="d"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -29,8 +30,45 @@
                     <Button x:Uid="CreateOrderBtn" x:Name="CreateOrderBtn" Content="Create Order" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Click="CreateOrderBtn_Click"/>
                     <Button x:Uid="myOrderListBtn" x:Name="myOrderListBtn" Content="My Order list" HorizontalAlignment="Left" Margin="0,140,0,0" VerticalAlignment="Top" Click="myOrderListBtn_Click"/>
                 </Grid>
+                
+            </PivotItem>
 
+            <PivotItem
+                x:Uid="PivotOrderList"
+                Header="My Orders"
+                DataContext="{Binding OrderList}"
+                d:DataContext="{Binding Source={d:DesignData Source=../TaxyApp.Core/DataModel/OrderList.json, Type=entity:OrderDS}}">
 
+                <ListView
+                     ItemsSource="{Binding}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock
+                                    Text="{Binding Title}"
+                                    TextWrapping="Wrap"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
+                                
+                                <ListView
+                                    ItemsSource="{Binding Route}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding Address}"
+                                                Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                                Margin="0,5,19,0"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+                
             </PivotItem>
             <!--Сводный элемент один-->
             <PivotItem
