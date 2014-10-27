@@ -9,6 +9,7 @@ namespace TaxyApp.Core.Managers
     public class ManagerFactory : TaxyApp.Core.Singleton<ManagerFactory>
     {
         private LocationManager locationMG = null;
+        private MapPainter mapPainter = null;
 
         public LocationManager GetLocationManager()
         {
@@ -18,6 +19,16 @@ namespace TaxyApp.Core.Managers
             }
 
             return this.locationMG;
+        }
+
+        public MapPainter GetMapPainter()
+        {
+            if (this.mapPainter == null)
+            {
+                this.mapPainter = new MapPainter();
+            }
+
+            return this.mapPainter;
         }
     }
 }

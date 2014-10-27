@@ -38,7 +38,9 @@ namespace TaxyApp.Core.DataModel.Order
         {
             int thread = Environment.CurrentManagedThreadId;
 
-            Task showRoutTask = this.ShowRoute().ContinueWith(t =>
+            Core.Managers.MapPainter painter = Core.Managers.ManagerFactory.Instance.GetMapPainter();
+
+            Task showRoutTask = painter.ShowRoute(this.RouteMapControl, this.MapRoute).ContinueWith(t =>
                 {
                     string msg = "route showed";
                 });
@@ -153,69 +155,15 @@ namespace TaxyApp.Core.DataModel.Order
             return route;
         }
 
-        public async Task ShowRoute()
-        {
-            if (this.MapRoute != null)
-            {
-                int thread = Environment.CurrentManagedThreadId;
-
-                Windows.Foundation.IAsyncAction action =
-                this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-                {
-                    Windows.UI.Xaml.Controls.Maps.MapRouteView viewOfRoute = new Windows.UI.Xaml.Controls.Maps.MapRouteView(this.MapRoute);
-                    viewOfRoute.RouteColor = Windows.UI.Colors.Yellow;
-                    viewOfRoute.OutlineColor = Windows.UI.Colors.Black;
-
-                    // Add the new MapRouteView to the Routes collection
-                    // of the MapControl.
-                    this.RouteMapControl.Routes.Add(viewOfRoute);
-
-                    // Fit the MapControl to the route.
-                    await this.RouteMapControl.TrySetViewBoundsAsync(
-                        this.MapRoute.BoundingBox,
-                        null,
-                        Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
-                });
-
-                await action;
-            }
-        }
-
         public async Task ShowMyPossitionAsync()
         {
-            TaxyApp.Core.Managers.LocationManager locationMG = TaxyApp.Core.Managers.ManagerFactory.Instance.GetLocationManager();
-
-            Geopoint myGeopoint = await locationMG.GetCurrentGeopoint();
-
-            this.RouteMapControl.Center = myGeopoint;
-
-            this.RouteMapControl.ZoomLevel = 12;
-            this.RouteMapControl.LandmarksVisible = true;
-
-            AddMapIcon(myGeopoint);
+            Managers.MapPainter painter = Managers.ManagerFactory.Instance.GetMapPainter();
+            await painter.ShowMyPossitionAsync(this.RouteMapControl);
         }
 
-        private void AddMapIcon(Geopoint point)
-        {
-            Windows.UI.Xaml.Shapes.Ellipse fence = new Windows.UI.Xaml.Shapes.Ellipse();
-            fence.Fill = new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 50, 120, 90));
 
-            fence.Width = 15;
-            fence.Height = 15;
 
-            //MapIcon MapIcon1 = new MapIcon();
-            //MapIcon1.Title = "Space Needle";
 
-            var childObj = new Windows.UI.Xaml.Controls.Image
-            {
-                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/point.png"))
-            };
-
-            Windows.UI.Xaml.Controls.Maps.MapControl.SetLocation(fence, point);
-            Windows.UI.Xaml.Controls.Maps.MapControl.SetNormalizedAnchorPoint(fence, new Windows.Foundation.Point(0.5, 0.5));
-
-            RouteMapControl.Children.Add(fence);
-        }
 
         public List<KeyValuePair<string, string>> ConverToKeyValue()
         {
