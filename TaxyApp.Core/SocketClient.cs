@@ -9,7 +9,7 @@ using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 
-namespace SocketApp
+namespace TaxyApp.Core
 {
     public class SocketClient
     {

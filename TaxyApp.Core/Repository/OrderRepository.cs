@@ -24,7 +24,7 @@ namespace TaxyApp.Core.Repository
 
             var postData = new List<KeyValuePair<string, string>>();
 
-            postData.Add(new KeyValuePair<string, string>("passengerid", user.Id.ToString()));
+            postData.Add(new KeyValuePair<string, string>("idpassenger", user.Id.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
 
@@ -36,13 +36,16 @@ namespace TaxyApp.Core.Repository
 
             var resp = jsonObj["response"];
 
-            var orderArray = resp.GetArray();
-
-            for (int i = 0; i < orderArray.Count; i++)
+            if (resp.ValueType == Windows.Data.Json.JsonValueType.Array)
             {
-                var ordderValue = orderArray[i];
-                Entities.Order order = this.GetObject(ordderValue);
-                orderList.Add(order);
+                var orderArray = resp.GetArray();
+
+                for (int i = 0; i < orderArray.Count; i++)
+                {
+                    var ordderValue = orderArray[i];
+                    Entities.Order order = this.GetObject(ordderValue);
+                    orderList.Add(order);
+                }
             }
 
 

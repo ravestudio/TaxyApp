@@ -191,5 +191,10 @@ namespace TaxyApp
 
             this.DefaultViewModel["OrderList"] = orderList;
         }
+
+        private void SocketPgBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SocketPage)); 
+        }
     }
 }
