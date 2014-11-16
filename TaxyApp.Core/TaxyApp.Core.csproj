@@ -101,6 +101,8 @@
     <Compile Include="Session.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="SocketClient.cs" />
+    <Compile Include="Socket\SocketManager.cs" />
+    <Compile Include="Socket\SocketRequest.cs" />
     <Compile Include="WebApiClient.cs" />
   </ItemGroup>
   <ItemGroup>

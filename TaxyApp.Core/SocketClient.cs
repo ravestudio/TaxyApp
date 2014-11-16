@@ -16,6 +16,8 @@ namespace TaxyApp.Core
         private StreamSocket clientSocket;
         private bool connected = false;
 
+        private String socketIOPatch = "/socket.io/websocket/";
+
         public SocketClient()
         {
             clientSocket = new StreamSocket();
@@ -27,6 +29,28 @@ namespace TaxyApp.Core
             // Try to connect to the 
             await clientSocket.ConnectAsync(serverHost, ServerPort);
             connected = true;
+
+            DataWriter writer = new DataWriter(clientSocket.OutputStream);
+            writer.WriteString("GET " + socketIOPatch + "?transport=websocket HTTP/1.1\r\n");
+            writer.WriteString("Host: http://" + ServerHostname + ":" + ServerPort + "\r\n");
+            writer.WriteString("Upgrade: websocket\r\n");
+            writer.WriteString("Connection: Upgrade\r\n");
+            writer.WriteString("Sec-WebSocket-Key: " + generateSocketKey() + "\r\n");
+            writer.WriteString("Sec-WebSocket-Version: 13\r\n");
+            writer.WriteString("Sec-WebSocket-Protocol: websocket\r\n");
+            writer.WriteString("Origin: *\r\n\r\n");
+
+            await writer.StoreAsync();
+
+            // detach the stream and close it
+            writer.DetachStream();
+            writer.Dispose();
+        }
+
+        //Socket key generation
+        private String generateSocketKey()
+        {
+            return new Guid().ToString();
         }
 
         public async Task SendAsync(string msg)

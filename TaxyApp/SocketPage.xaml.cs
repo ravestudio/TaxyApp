@@ -116,6 +116,16 @@ namespace TaxyApp
             client.ConnectAsync(defaultViewModel.Host, defaultViewModel.Port).ContinueWith(t =>
                 {
                     string res = "ok";
+
+                    TaxyApp.Core.Socket.SocketManager socketMG = new Core.Socket.SocketManager(client);
+                    socketMG.Auth().ContinueWith(w =>
+                        {
+                            socketMG.Read().ContinueWith(r =>
+                                {
+                                    string read = "ok";
+                                });
+                        });
+
                 });
         }
     }
