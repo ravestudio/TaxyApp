@@ -13,8 +13,8 @@ namespace TaxyApp.DataModel
 
         public LoginModel()
         {
-            this.PhoneNumber = "+79136123087";
-            this.PIN = "94c0915ab3bcbc61c1c61624dd6d7cd5";
+            this.PhoneNumber = "79136123087";
+            this.PIN = "75691235";
         }
     }
 }

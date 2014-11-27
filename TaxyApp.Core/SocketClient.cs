@@ -27,24 +27,35 @@ namespace TaxyApp.Core
         {
             HostName serverHost = new HostName(ServerHostname);
             // Try to connect to the 
-            await clientSocket.ConnectAsync(serverHost, ServerPort);
-            connected = true;
 
-            DataWriter writer = new DataWriter(clientSocket.OutputStream);
-            writer.WriteString("GET " + socketIOPatch + "?transport=websocket HTTP/1.1\r\n");
-            writer.WriteString("Host: http://" + ServerHostname + ":" + ServerPort + "\r\n");
-            writer.WriteString("Upgrade: websocket\r\n");
-            writer.WriteString("Connection: Upgrade\r\n");
-            writer.WriteString("Sec-WebSocket-Key: " + generateSocketKey() + "\r\n");
-            writer.WriteString("Sec-WebSocket-Version: 13\r\n");
-            writer.WriteString("Sec-WebSocket-Protocol: websocket\r\n");
-            writer.WriteString("Origin: *\r\n\r\n");
+            try
+            {
+                await clientSocket.ConnectAsync(serverHost, ServerPort);
+                connected = true;
+            }
+            catch(Exception ex)
+            {
+                string msg = ex.Message;
+            }
 
-            await writer.StoreAsync();
+            if (connected)
+            {
+                DataWriter writer = new DataWriter(clientSocket.OutputStream);
+                writer.WriteString("GET " + socketIOPatch + "?transport=websocket HTTP/1.1\r\n");
+                writer.WriteString("Host: http://" + ServerHostname + ":" + ServerPort + "\r\n");
+                writer.WriteString("Upgrade: websocket\r\n");
+                writer.WriteString("Connection: Upgrade\r\n");
+                writer.WriteString("Sec-WebSocket-Key: " + generateSocketKey() + "\r\n");
+                writer.WriteString("Sec-WebSocket-Version: 13\r\n");
+                writer.WriteString("Sec-WebSocket-Protocol: websocket\r\n");
+                writer.WriteString("Origin: *\r\n\r\n");
 
-            // detach the stream and close it
-            writer.DetachStream();
-            writer.Dispose();
+                await writer.StoreAsync();
+
+                // detach the stream and close it
+                writer.DetachStream();
+                writer.Dispose();
+            }
         }
 
         //Socket key generation
