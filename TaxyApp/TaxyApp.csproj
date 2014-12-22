@@ -100,6 +100,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="RegistrationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SocketPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -126,6 +130,7 @@
       <DependentUpon>CreateOrderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\LoginModel.cs" />
+    <Compile Include="DataModel\RegistrationModel.cs" />
     <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="DataModel\SocketModel.cs" />
     <Compile Include="ItemPage.xaml.cs">
@@ -135,6 +140,9 @@
       <DependentUpon>PivotPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationPage.xaml.cs">
+      <DependentUpon>RegistrationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SocketPage.xaml.cs">
       <DependentUpon>SocketPage.xaml</DependentUpon>
     </Compile>

@@ -3,12 +3,18 @@
 			"Id": "1",
 			"StartDate": "\/Date(1330848000000-0800)\/",
 			"Title" : "Order 15.10.2014 18:20",
+			"ordersumm" : "155.5",
+			"routemeters" : "4895",
+			"DistanceAndPrice" : "4.5km, 155.4$",
 			"Route": [{"Address":"Омск, Маркса 89"}, {"Address":"Омск, Жуковского 33"}]
 		},
 		{
 			"Id": "2",
 			"StartDate": "\/Date(1330848000000-0800)\/",
 			"Title" : "Order 16.10.2014 7:40",
+			"ordersumm" : "75.4",
+			"routemeters" : "1840",
+			"DistanceAndPrice" : "1.8km, 75.4$",
 			"Route": [{"Address":"Омск, Жуковского 33"}, {"Address":"Омск, Учебная 83"}]
 		}
 	]

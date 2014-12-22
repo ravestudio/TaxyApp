@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace TaxyApp.DataModel
 {
-    public class LoginModel
+    public class RegistrationModel
     {
         public string PhoneNumber { get; set; }
-        public string PIN { get; set; }
 
-        public LoginModel()
+        public RegistrationModel()
         {
             this.PhoneNumber = "79659755758";
-            this.PIN = "79787711";
         }
     }
 }

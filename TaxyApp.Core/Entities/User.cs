@@ -15,7 +15,7 @@ namespace TaxyApp.Core.Entities
         {
             this.Id = int.Parse(jsonObj["response"].GetObject()["idpassenger"].GetString());
             this.token = jsonObj["response"].GetObject()["token"].GetString();
-            this.pin = jsonObj["response"].GetObject()["pin"].GetString();
+            //this.pin = jsonObj["response"].GetObject()["pin"].GetString();
 
             base.ReadData(jsonObj);
         }

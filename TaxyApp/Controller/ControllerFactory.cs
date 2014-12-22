@@ -9,6 +9,7 @@ namespace TaxyApp.Controller
     public class ControllerFactory : TaxyApp.Core.Singleton<ControllerFactory>
     {
         private OrderController orderController = null;
+        private AuthenticationController authenticationController = null;
 
         public OrderController GetOrderController()
         {
@@ -18,6 +19,16 @@ namespace TaxyApp.Controller
             }
 
             return this.orderController;
+        }
+
+        public AuthenticationController GetAuthenticationController()
+        {
+            if (this.authenticationController == null)
+            {
+                this.authenticationController = new AuthenticationController();
+            }
+
+            return this.authenticationController;
         }
     }
 }

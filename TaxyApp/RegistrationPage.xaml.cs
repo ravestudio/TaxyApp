@@ -23,12 +23,12 @@ namespace TaxyApp
     /// <summary>
     /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
     /// </summary>
-    public sealed partial class AuthenticationPage : Page
+    public sealed partial class RegistrationPage : Page
     {
         private NavigationHelper navigationHelper;
         private Controller.AuthenticationController defaultViewModel = Controller.ControllerFactory.Instance.GetAuthenticationController();
 
-        public AuthenticationPage()
+        public RegistrationPage()
         {
             this.InitializeComponent();
 

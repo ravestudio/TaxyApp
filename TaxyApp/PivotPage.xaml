@@ -63,6 +63,12 @@
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
+
+                                <TextBlock
+                                    Text="{Binding DistanceAndPrice}"
+                                    TextWrapping="Wrap"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
                                 
                             </StackPanel>
                         </DataTemplate>

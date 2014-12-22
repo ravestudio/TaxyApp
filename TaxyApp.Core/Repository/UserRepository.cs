@@ -10,6 +10,21 @@ namespace TaxyApp.Core.Repository
     {
         public UserRepository(TaxyApp.Core.WebApiClient apiClient) : base(apiClient)
         {
+        }
+
+        public async Task<string> RegisterUser(string PhoneNumber)
+        {
+            string url = "http://serv.giddix.ru/api/passenger_registration/";
+
+            var postData = new List<KeyValuePair<string, string>>();
+
+            postData.Add(new KeyValuePair<string, string>("phone", PhoneNumber));        
+            postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
+            postData.Add(new KeyValuePair<string, string>("licenseaccepted", "1"));
+
+            string data = await this._apiClient.GetData(url, postData);
+
+            return data;
 
         }
 

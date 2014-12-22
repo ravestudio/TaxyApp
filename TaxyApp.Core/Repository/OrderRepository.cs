@@ -34,11 +34,13 @@ namespace TaxyApp.Core.Repository
 
             var jsonObj = Windows.Data.Json.JsonValue.Parse(data).GetObject();
 
-            var resp = jsonObj["response"];
+            var resp = jsonObj["response"].GetObject();
+            var orders = resp["orders"];
 
-            if (resp.ValueType == Windows.Data.Json.JsonValueType.Array)
+
+            if (orders.ValueType == Windows.Data.Json.JsonValueType.Array)
             {
-                var orderArray = resp.GetArray();
+                var orderArray = orders.GetArray();
 
                 for (int i = 0; i < orderArray.Count; i++)
                 {

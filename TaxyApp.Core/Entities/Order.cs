@@ -10,6 +10,9 @@ namespace TaxyApp.Core.Entities
     {
         public DateTime StartDate { get; set; }
 
+        public decimal Ordersumm { get; set; }
+        public int Routemeters { get; set; }
+
         public IList<OrderRouteItem> route = new List<OrderRouteItem>();
 
         public IList<OrderRouteItem> Route
@@ -28,6 +31,14 @@ namespace TaxyApp.Core.Entities
             }
         }
 
+        public string DistanceAndPrice
+        {
+            get
+            {
+                return string.Format("{0}km, {1}$", (float)this.Routemeters/1000, this.Ordersumm);
+            }
+        }
+
         public override void ReadData(Windows.Data.Json.JsonObject jsonObj)
         {
             var type = jsonObj["idorder"].ValueType;
@@ -35,6 +46,9 @@ namespace TaxyApp.Core.Entities
             this.Id = (int)jsonObj["idorder"].GetNumber();
 
             this.StartDate = DateTime.Parse(jsonObj["startdate"].GetString(), System.Globalization.CultureInfo.InvariantCulture);
+
+            this.Ordersumm = decimal.Parse(jsonObj["ordersumm"].GetString(), System.Globalization.CultureInfo.InvariantCulture);
+            this.Routemeters = int.Parse(jsonObj["routemeters"].GetString());
 
             var routeArray = jsonObj["routes"].GetArray();
 
@@ -69,5 +83,6 @@ namespace TaxyApp.Core.Entities
 
         public double Latitude {get; set; }
         public double Longitude { get; set; }
+
     }
 }

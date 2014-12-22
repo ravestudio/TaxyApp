@@ -35,7 +35,7 @@ namespace TaxyApp.Controller
 
             //var postData = new List<KeyValuePair<string, string>>();
 
-            postData.Add(new KeyValuePair<string, string>("passengerid", user.Id.ToString()));
+            postData.Add(new KeyValuePair<string, string>("idpassenger", user.Id.ToString()));
             postData.Add(new KeyValuePair<string, string>("token", user.token));
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
 
