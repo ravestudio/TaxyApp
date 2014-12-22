@@ -80,12 +80,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Common\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="DataModel\Order\OrderDetail.cs" />
     <Compile Include="DataModel\Order\OrderPoint.cs" />
+    <Compile Include="DataModel\Order\OrderService.cs" />
     <Compile Include="DataModel\SearchModel.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Order.cs" />

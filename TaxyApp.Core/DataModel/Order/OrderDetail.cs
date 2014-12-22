@@ -13,11 +13,20 @@ namespace TaxyApp.Core.DataModel.Order
     public class OrderDetail
     {
         private ObservableCollection<OrderPoint> _orderPointList = null;
+        private ObservableCollection<OrderService> _orderServiceList = null;
 
         public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
 
+        public DateTime EndDate { get; set; }
+        public DateTime EndTime { get; set; }
+
         public OrderDetail()
         {
+            InitServiceList();
+
+            this.EndDate = DateTime.Now;
+            this.EndTime = DateTime.Now;
+
             this._orderPointList = new ObservableCollection<OrderPoint>();
 
             OrderPoint pointfrom = new OrderPoint();
@@ -32,6 +41,17 @@ namespace TaxyApp.Core.DataModel.Order
             this._orderPointList.Add(pointSecond);
 
             this.MapRouteChanged += OrderModel_MapRouteChanged;
+        }
+
+        private void InitServiceList()
+        {
+            this._orderServiceList = new ObservableCollection<OrderService>();
+            this._orderServiceList.Add(new OrderService() { id = 1, Name = "Багаж", Checked = false });
+            this._orderServiceList.Add(new OrderService() { id = 2, Name = "Можно курить", Checked = false });
+            this._orderServiceList.Add(new OrderService() { id = 4, Name = "Водитель не курит", Checked = false });
+            this._orderServiceList.Add(new OrderService() { id = 8, Name = "Детское кресло", Checked = false });
+            this._orderServiceList.Add(new OrderService() { id = 16, Name = "Удобства для инвалидов", Checked = false });
+            this._orderServiceList.Add(new OrderService() { id = 32, Name = "Перевозка животных ", Checked = false });
         }
 
         void OrderModel_MapRouteChanged(object sender, EventArgs e)
@@ -78,6 +98,14 @@ namespace TaxyApp.Core.DataModel.Order
             get
             {
                 return this._orderPointList;
+            }
+        }
+
+        public ObservableCollection<OrderService> OrderServiceList
+        {
+            get
+            {
+                return this._orderServiceList;
             }
         }
 
@@ -176,6 +204,16 @@ namespace TaxyApp.Core.DataModel.Order
             //keyValueData.Add(new KeyValuePair<string, string>("service", "1023"));
             //keyValueData.Add(new KeyValuePair<string, string>("passengersnum", "3"));
 
+            byte servieces = 0;
+
+            foreach(OrderService service in this.OrderServiceList)
+            {
+                if (service.Checked)
+                {
+                    servieces = (byte)((byte)servieces | (byte)service.id);
+                }
+            }
+
             int i = 0;
             foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
             {
@@ -205,11 +243,21 @@ namespace TaxyApp.Core.DataModel.Order
                 i++;
             }
 
+            if (servieces > 0)
+            {
+                keyValueData.Add(new KeyValuePair<string, string>("service", servieces.ToString()));
+            }
+
             if (this.MapRoute != null)
             {
                 keyValueData.Add(new KeyValuePair<string, string>("routemeters", this.MapRoute.LengthInMeters.ToString()));
                 keyValueData.Add(new KeyValuePair<string, string>("routetime", this.MapRoute.EstimatedDuration.Minutes.ToString()));
             }
+
+            //YYYY-MM-DD HH:II
+            string enddate = string.Format("{0}-{1}-{2} {3}:{4}", this.EndDate.Year, this.EndDate.Month,this.EndDate.Day, this.EndTime.Hour, this.EndTime.Minute);
+
+            keyValueData.Add(new KeyValuePair<string, string>("enddate", enddate));
 
             return keyValueData;
         }

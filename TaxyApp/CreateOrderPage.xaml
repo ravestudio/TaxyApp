@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TaxyApp"
+    xmlns:Converters ="using:TaxyApp.Core.Common"
     xmlns:viewModel="using:TaxyApp.Core.DataModel"
     xmlns:controller="using:TaxyApp.Controller"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -15,7 +16,11 @@
     d:DataContext="{Binding Source={d:DesignData Source=../TaxyApp.Core/DataModel/OrderData.json, Type=controller:OrderController}}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    
+    <Page.Resources>
+        <Converters:DateTimeToDateTimeOffsetConverter
+            x:Key="DateTimeToDateTimeOffsetConverter"/>
+    </Page.Resources>
+
     <Grid>
 
         <Pivot x:Uid="Pivot" Title="TAXY APPLICATION" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
@@ -34,6 +39,7 @@
 
                 <!--TODO: Содержимое должно размещаться в следующей сетке-->
                 <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+                    <StackPanel>
                     <ListView
                     ItemsSource="{Binding OrderModel.OrderPointList}"
                     IsItemClickEnabled="True"
@@ -62,6 +68,41 @@
                         </ListView.ItemTemplate>
 
                     </ListView>
+
+                        <DatePicker Date="{Binding Path=OrderModel.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"></DatePicker>
+                        <TimePicker Time="{Binding Path=OrderModel.EndTime, Mode=TwoWay}"></TimePicker>
+                    </StackPanel>
+                </Grid>
+            </PivotItem>
+            
+            <PivotItem
+                x:Uid="PivotService"
+                Header="Services" Margin="0,0">
+                <Grid Grid.Row="1" x:Name="ServicesGrid" Margin="19,9.5,19,0">
+
+                    <ListView
+                    ItemsSource="{Binding OrderModel.OrderServiceList}"
+                    IsItemClickEnabled="True"
+                    >
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <CheckBox  Content="{Binding Path=Name}" IsChecked="{Binding Path=Checked, Mode=TwoWay}"></CheckBox>
+                                    <!--<TextBlock Text="{Binding Path=Name}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>-->
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                    
                 </Grid>
             </PivotItem>
 
