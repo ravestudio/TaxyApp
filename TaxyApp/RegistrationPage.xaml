@@ -31,7 +31,7 @@
         <!--TODO: Содержимое должно размещаться в следующей сетке-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                <TextBox Name="phone" Header="Phone number" Text="{Binding RegistrationModel.PhoneNumber}"/>
+                <TextBox Name="phone" Header="Phone number" Text="{Binding RegistrationModel.PhoneNumber, Mode=TwoWay}"/>
                 <Button Content="Register" Command="{Binding RegisterCmd}" Margin="0,30,0,0"></Button>
                 <Button Content="Login" Command="{Binding GotoLoginCmd}" Margin="0,30,0,0"></Button>
             </StackPanel>

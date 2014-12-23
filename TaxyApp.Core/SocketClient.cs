@@ -69,7 +69,9 @@ namespace TaxyApp.Core
             //string sendData = msg + Environment.NewLine;
             DataWriter writer = new DataWriter(clientSocket.OutputStream);
 
-            byte[] data = Hybi10Encoder(msg);
+            String message = string.Format("42[\"message\", \"{0}\"]", msg);
+
+            byte[] data = Hybi10Encoder(message);
 
             writer.WriteBytes(data); 
 
@@ -95,7 +97,7 @@ namespace TaxyApp.Core
                 await reader.LoadAsync(2500);
 
                 //read complete message
-                int byteCount = reader.ReadInt32();
+                int byteCount = reader.();
 
                 byte[] bytes = new byte[byteCount];
                 reader.ReadBytes(bytes);
