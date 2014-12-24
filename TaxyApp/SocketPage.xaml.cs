@@ -120,10 +120,11 @@ namespace TaxyApp
                     TaxyApp.Core.Socket.SocketManager socketMG = new Core.Socket.SocketManager(client);
                     socketMG.Auth().ContinueWith(w =>
                         {
-                            socketMG.Read().ContinueWith(r =>
-                                {
-                                    string read = "ok";
-                                });
+                            socketMG.Start();
+                            //socketMG.Read().ContinueWith(r =>
+                            //    {
+                            //        string read = "ok";
+                            //    });
                         });
 
                 });

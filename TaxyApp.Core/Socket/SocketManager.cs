@@ -35,6 +35,11 @@ namespace TaxyApp.Core.Socket
             return send;
         }
 
+        public void Start()
+        {
+            client.StrartListen();
+        }
+
         public Task Read()
         {
             Task read = client.ReceiveDataAsync();
