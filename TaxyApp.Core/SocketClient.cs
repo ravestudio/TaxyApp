@@ -56,6 +56,30 @@ namespace TaxyApp.Core
                 writer.DetachStream();
                 writer.Dispose();
             }
+
+            Task readHead = this.ReadHeader();
+
+            await readHead;
+        }
+
+        public async Task ReadHeader()
+        {
+            Windows.Storage.Streams.IInputStream stream = clientSocket.InputStream;
+
+            DataReader reader = new DataReader(stream);
+
+            System.Text.StringBuilder header = new StringBuilder();
+
+            uint bufferLenght = 0;
+
+            await reader.LoadAsync(100);
+
+            bufferLenght = reader.UnconsumedBufferLength;
+
+            header.Append(reader.ReadString(bufferLenght));
+
+            //reader.DetachStream();
+            //reader.Dispose();
         }
 
         //Socket key generation
