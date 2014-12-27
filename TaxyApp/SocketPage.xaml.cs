@@ -28,6 +28,8 @@ namespace TaxyApp
         private NavigationHelper navigationHelper;
         private DataModel.SocketModel defaultViewModel = new DataModel.SocketModel();
 
+        private TaxyApp.Core.SocketClient SocketClient = new Core.SocketClient();
+
         public SocketPage()
         {
             this.InitializeComponent();
@@ -111,23 +113,29 @@ namespace TaxyApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            TaxyApp.Core.SocketClient client = new Core.SocketClient();
+            //TaxyApp.Core.SocketClient client = new Core.SocketClient();
 
-            client.ConnectAsync(defaultViewModel.Host, defaultViewModel.Port).ContinueWith(t =>
+            SocketClient.ConnectAsync(defaultViewModel.Host, defaultViewModel.Port).ContinueWith(t =>
                 {
                     string res = "ok";
 
-                    TaxyApp.Core.Socket.SocketManager socketMG = new Core.Socket.SocketManager(client);
-                    socketMG.Auth().ContinueWith(w =>
-                        {
-                            socketMG.Start();
-                            //socketMG.Read().ContinueWith(r =>
-                            //    {
-                            //        string read = "ok";
-                            //    });
-                        });
+                    TaxyApp.Core.Socket.SocketManager socketMG = new Core.Socket.SocketManager(SocketClient);
+
+                    socketMG.Start();
 
                 });
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            TaxyApp.Core.Socket.SocketManager socketMG = new Core.Socket.SocketManager(SocketClient);
+
+            socketMG.Auth().ContinueWith(w =>
+            {
+                string res = "ok";
+
+                //socketMG.Start();
+            });
         }
     }
 }

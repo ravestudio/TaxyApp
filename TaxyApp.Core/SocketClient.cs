@@ -70,16 +70,13 @@ namespace TaxyApp.Core
 
             System.Text.StringBuilder header = new StringBuilder();
 
-            uint bufferLenght = 0;
+            var count = await reader.LoadAsync(164);
 
-            await reader.LoadAsync(100);
+            header.Append(reader.ReadString(count));
 
-            bufferLenght = reader.UnconsumedBufferLength;
 
-            header.Append(reader.ReadString(bufferLenght));
-
-            //reader.DetachStream();
-            //reader.Dispose();
+            reader.DetachStream();
+            reader.Dispose();
         }
 
         //Socket key generation
@@ -92,6 +89,8 @@ namespace TaxyApp.Core
         {
             //string sendData = msg + Environment.NewLine;
             DataWriter writer = new DataWriter(clientSocket.OutputStream);
+
+            msg = msg.Replace("\"", "\\\"");
 
             String message = string.Format("42[\"message\", \"{0}\"]", msg);
 
@@ -110,10 +109,16 @@ namespace TaxyApp.Core
 
         public void StrartListen()
         {
-            Task t = Task.Run(InputProcess().Result);
+            var th = Environment.CurrentManagedThreadId;
+
+            //Task t = Task.Run(InputProcess().Result);
+
+            Task t = new Task(InputProcess);
+
+            t.Start();
         }
 
-        private async Task<System.Action> InputProcess()
+        private async void InputProcess()
         {
             var th = Environment.CurrentManagedThreadId;
             Windows.Storage.Streams.IInputStream stream = clientSocket.InputStream;
