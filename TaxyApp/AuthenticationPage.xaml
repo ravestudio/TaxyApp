@@ -23,16 +23,16 @@
         </Grid.RowDefinitions>
 
         <!--Панель заголовка-->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+        <!--<StackPanel Grid.Row="0" Margin="19,0,0,0">
+            <TextBlock Text="Wolley Taxy" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="Login" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
+        </StackPanel>-->
 
         <!--TODO: Содержимое должно размещаться в следующей сетке-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,150,0,0">
                 <TextBox  Name="pin" Header="Enter your code (input SMS) or wait send SMS" Text="{Binding LoginModel.PIN, Mode=TwoWay}" HorizontalAlignment="Center"/>
-                <Button Content="OK" Command="{Binding LoginCmd}" Margin="0,30,0,0" HorizontalAlignment="Center"></Button>
+                <Button Content="OK" Command="{Binding LoginCmd}" Margin="0,30,0,0" HorizontalAlignment="Center" Style="{StaticResource TaxyButtonGreenStyle}"></Button>
             </StackPanel>
             
         </Grid>

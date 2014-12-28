@@ -182,7 +182,8 @@ namespace TaxyApp
 
         private void CreateOrderBtn_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CreateOrderPage)); 
+            //this.Frame.Navigate(typeof(CreateOrderPage)); 
+            this.Frame.Navigate(typeof(OrderDetailPage)); 
         }
 
         private async void myOrderListBtn_Click(object sender, RoutedEventArgs e)

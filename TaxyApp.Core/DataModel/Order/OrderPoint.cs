@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace TaxyApp.Core.DataModel.Order
 {
-    public class OrderPoint
+    public class OrderItem
     {
         public int Priority { get; set; }
+        public string Cmd { get; set; }
+
+        public string Title { get; set; }
+    }
+
+    public class OrderPoint : OrderItem
+    {
         public LocationItem Location { get; set; }
 
         private IDictionary<int, string> orderString = null;

@@ -32,7 +32,7 @@
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,150,0,0">
                 <TextBox Name="phone" Header="Enter your phone to registration" HorizontalAlignment="Center" Text="{Binding RegistrationModel.PhoneNumber, Mode=TwoWay}"/>
-                <Button Content="Register" Command="{Binding RegisterCmd}" Margin="0,30,0,0" HorizontalAlignment="Center"/>
+                <Button Content="Register" Command="{Binding RegisterCmd}" Margin="0,30,0,0" HorizontalAlignment="Center" Style="{StaticResource TaxyButtonGreenStyle}"/>
             </StackPanel>
         </Grid>
     </Grid>

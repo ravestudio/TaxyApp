@@ -14,7 +14,7 @@ namespace TaxyApp.DataModel
         public LoginModel()
         {
             this.PhoneNumber = string.Empty;
-            this.PIN = "79787711";
+            this.PIN = string.Empty;
 
             this.ReadData();
         }

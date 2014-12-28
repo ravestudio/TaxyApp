@@ -4,5 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TaxyApp"
     RequestedTheme="Light">
+    
+    <Application.Resources>
+        <Style x:Key="TaxyButtonGreenStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF41D148"/>
+            <Setter Property="Foreground" Value="#FF1C4D09"/>
+            <Setter Property="BorderBrush" Value="#FF219B21"/>
+        </Style>
+    </Application.Resources>
 
 </Application>
