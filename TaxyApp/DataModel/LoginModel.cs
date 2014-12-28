@@ -13,8 +13,31 @@ namespace TaxyApp.DataModel
 
         public LoginModel()
         {
-            this.PhoneNumber = "79659755758";
+            this.PhoneNumber = string.Empty;
             this.PIN = "79787711";
+
+            this.ReadData();
+        }
+
+        public void SaveData()
+        {
+            Windows.Storage.ApplicationData.Current.LocalSettings.Values["pin"] = this.PIN;
+        }
+
+        public void ReadData()
+        {
+            object phone = Windows.Storage.ApplicationData.Current.LocalSettings.Values["PhoneNumber"];
+            object pin = Windows.Storage.ApplicationData.Current.LocalSettings.Values["pin"];
+
+            if (phone != null)
+            {
+                this.PhoneNumber = Windows.Storage.ApplicationData.Current.LocalSettings.Values["PhoneNumber"].ToString();
+            }
+
+            if (pin != null)
+            {
+                this.PIN = Windows.Storage.ApplicationData.Current.LocalSettings.Values["pin"].ToString();
+            }
         }
     }
 }

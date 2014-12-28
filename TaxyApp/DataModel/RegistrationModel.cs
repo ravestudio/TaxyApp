@@ -12,7 +12,24 @@ namespace TaxyApp.DataModel
 
         public RegistrationModel()
         {
-            this.PhoneNumber = "79659755758";
+            this.PhoneNumber = "Phone number";
+
+            this.ReadNumber();
+        }
+
+        public void SaveNumber()
+        {
+            Windows.Storage.ApplicationData.Current.LocalSettings.Values["PhoneNumber"] = this.PhoneNumber;
+        }
+
+        public void ReadNumber()
+        {
+            object phone = Windows.Storage.ApplicationData.Current.LocalSettings.Values["PhoneNumber"];
+
+            if (phone != null)
+            {
+                this.PhoneNumber = Windows.Storage.ApplicationData.Current.LocalSettings.Values["PhoneNumber"].ToString();
+            }
         }
     }
 }

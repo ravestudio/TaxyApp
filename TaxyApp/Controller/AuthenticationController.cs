@@ -16,7 +16,6 @@ namespace TaxyApp.Controller
 
         public LoginCommand LoginCmd { get; set; }
         public RegisterCommand RegisterCmd { get; set; }
-        public GotoLoginCommand GotoLoginCmd { get; set; }
 
         public Windows.UI.Xaml.Controls.Page Page { get; set; }
 
@@ -26,39 +25,8 @@ namespace TaxyApp.Controller
             this.RegistrationModel = new DataModel.RegistrationModel();
             this.LoginCmd = new LoginCommand(this);
             this.RegisterCmd = new RegisterCommand(this);
-            this.GotoLoginCmd = new GotoLoginCommand(this);
         }
 
-    }
-
-    public class GotoLoginCommand : System.Windows.Input.ICommand
-    {
-        private AuthenticationController _controller = null;
-
-        public GotoLoginCommand(AuthenticationController controller)
-        {
-            this._controller = controller;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
-        {
-            Windows.Foundation.IAsyncAction action =
-                this._controller.Page.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
-                    int thread = Environment.CurrentManagedThreadId;
-
-                    Frame frame = _controller.Page.Frame;
-
-                    frame.Navigate(typeof(AuthenticationPage));
-                });
-        }
     }
 
     public class RegisterCommand : System.Windows.Input.ICommand
@@ -87,7 +55,20 @@ namespace TaxyApp.Controller
 
             userRepository.RegisterUser(regModel.PhoneNumber).ContinueWith(t =>
                 {
+                    regModel.SaveNumber();
+
                     string res = t.Result;
+
+                    Windows.Foundation.IAsyncAction action =
+                    this._controller.Page.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        int thread = Environment.CurrentManagedThreadId;
+
+                        Frame frame = _controller.Page.Frame;
+
+                        frame.Navigate(typeof(AuthenticationPage));
+                    });
+
                 });
         }
     }
@@ -117,6 +98,8 @@ namespace TaxyApp.Controller
 
             userRepository.GetUser(model.PhoneNumber, model.PIN).ContinueWith(t =>
                 {
+                    model.SaveData();
+
                     TaxyApp.Core.Session.Instance.SetUSer(t.Result);
 
                     Windows.Foundation.IAsyncAction action =

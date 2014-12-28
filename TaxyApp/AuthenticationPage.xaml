@@ -31,9 +31,8 @@
         <!--TODO: Содержимое должно размещаться в следующей сетке-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                <TextBox Name="phone" Header="Phone number" Text="{Binding LoginModel.PhoneNumber, Mode=TwoWay}"/>
-                <TextBox  Name="pin" Header="PIN" Text="{Binding LoginModel.PIN, Mode=TwoWay}"/>
-                <Button Content="Login" Command="{Binding LoginCmd}" Margin="0,30,0,0"></Button>
+                <TextBox  Name="pin" Header="Enter your code (input SMS) or wait send SMS" Text="{Binding LoginModel.PIN, Mode=TwoWay}" HorizontalAlignment="Center"/>
+                <Button Content="OK" Command="{Binding LoginCmd}" Margin="0,30,0,0" HorizontalAlignment="Center"></Button>
             </StackPanel>
             
         </Grid>

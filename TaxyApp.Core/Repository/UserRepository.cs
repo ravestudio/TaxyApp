@@ -22,7 +22,17 @@ namespace TaxyApp.Core.Repository
             postData.Add(new KeyValuePair<string, string>("idcompany", "1"));
             postData.Add(new KeyValuePair<string, string>("licenseaccepted", "1"));
 
-            string data = await this._apiClient.GetData(url, postData);
+            string data = string.Empty;
+
+            object pin = Windows.Storage.ApplicationData.Current.LocalSettings.Values["pin"];
+            if (pin != null)
+            {
+                data = "ok";
+            }
+            else
+            {
+                data = await this._apiClient.GetData(url, postData);
+            }
 
             return data;
 

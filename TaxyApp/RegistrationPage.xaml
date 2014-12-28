@@ -23,17 +23,16 @@
         </Grid.RowDefinitions>
 
         <!--Панель заголовка-->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+        <!--<StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="Registration" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
+        </StackPanel>-->
 
         <!--TODO: Содержимое должно размещаться в следующей сетке-->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                <TextBox Name="phone" Header="Phone number" Text="{Binding RegistrationModel.PhoneNumber, Mode=TwoWay}"/>
-                <Button Content="Register" Command="{Binding RegisterCmd}" Margin="0,30,0,0"></Button>
-                <Button Content="Login" Command="{Binding GotoLoginCmd}" Margin="0,30,0,0"></Button>
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,150,0,0">
+                <TextBox Name="phone" Header="Enter your phone to registration" HorizontalAlignment="Center" Text="{Binding RegistrationModel.PhoneNumber, Mode=TwoWay}"/>
+                <Button Content="Register" Command="{Binding RegisterCmd}" Margin="0,30,0,0" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
     </Grid>
