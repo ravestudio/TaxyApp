@@ -11,7 +11,24 @@ namespace TaxyApp.Core.DataModel.Order
         public int Priority { get; set; }
         public string Cmd { get; set; }
 
-        public string Title { get; set; }
+        protected string _title = string.Empty;
+
+        public string Title {
+            get
+            {
+                return this.GetTitle();
+            }
+
+            set
+            {
+                this._title = value;
+            }
+        }
+
+        protected virtual string GetTitle()
+        {
+            return this._title;
+        }
     }
 
     public class OrderPoint : OrderItem
@@ -51,6 +68,11 @@ namespace TaxyApp.Core.DataModel.Order
         {
             bool ret = (this.Location != null && this.Location.Ready);
             return ret;
+        }
+
+        protected override string GetTitle()
+        {
+            return IsDataReady()? this.Location.Address:this._title;
         }
     }
 }

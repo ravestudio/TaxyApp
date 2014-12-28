@@ -12,7 +12,7 @@ namespace TaxyApp.Core.DataModel.Order
 {
     public class OrderDetail
     {
-        private ObservableCollection<OrderPoint> _orderPointList = null;
+        private ObservableCollection<OrderItem> _orderItemList = null;
         private ObservableCollection<OrderService> _orderServiceList = null;
 
         public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
@@ -27,18 +27,34 @@ namespace TaxyApp.Core.DataModel.Order
             this.EndDate = DateTime.Now;
             this.EndTime = DateTime.Now;
 
-            this._orderPointList = new ObservableCollection<OrderPoint>();
+            this._orderItemList = new ObservableCollection<OrderItem>();
 
             OrderPoint pointfrom = new OrderPoint();
             pointfrom.Priority = 0;
+            pointfrom.Title = "Address from";
             pointfrom.Location = new LocationItem() {  Address = "Input address"};
 
             OrderPoint pointSecond = new OrderPoint();
             pointSecond.Priority = 1;
+            pointSecond.Title = "Address";
             pointSecond.Location = new LocationItem() { Address = "Input address" };
 
-            this._orderPointList.Add(pointfrom);
-            this._orderPointList.Add(pointSecond);
+            this._orderItemList.Add(pointfrom);
+            this._orderItemList.Add(pointSecond);
+
+            this._orderItemList.Add(new OrderItem()
+                {
+                    Priority = 10,
+                    Title = "Now",
+                    Cmd = "Now"
+                });
+
+            this._orderItemList.Add(new OrderItem()
+            {
+                Priority = 11,
+                Title = "Services",
+                Cmd = "Services"
+            });
 
             this.MapRouteChanged += OrderModel_MapRouteChanged;
         }
@@ -93,11 +109,11 @@ namespace TaxyApp.Core.DataModel.Order
             }
         }
 
-        public ObservableCollection<OrderPoint> OrderPointList
+        public ObservableCollection<OrderItem> OrderItemList
         {
             get
             {
-                return this._orderPointList;
+                return this._orderItemList;
             }
         }
 
@@ -139,14 +155,23 @@ namespace TaxyApp.Core.DataModel.Order
                 }
             });
 
-            if (this._orderPointList.Count == this._orderPointList.Where(p => p.IsDataReady()).Count())
+            if (this._orderItemList.OfType<OrderPoint>().Count() == this._orderItemList.OfType<OrderPoint>().Where(p => p.IsDataReady()).Count())
             {
                 OrderPoint newPoint = new OrderPoint();
-                newPoint.Priority = this._orderPointList.Count;
-
+                newPoint.Priority = this._orderItemList.OfType<OrderPoint>().Count();
+                newPoint.Title = string.Format("Address {0}", newPoint.Priority);
                 newPoint.Location = new LocationItem() {  Address = string.Empty};
 
-                this._orderPointList.Add(newPoint);
+                this._orderItemList.Add(newPoint);
+
+                List<OrderItem> sortedList = this.OrderItemList.OrderBy(i => i.Priority).ToList();
+
+                this.OrderItemList.Clear();
+
+                foreach (OrderItem item in sortedList)
+                {
+                    this.OrderItemList.Add(item);
+                }
             }
         }
 
@@ -158,7 +183,7 @@ namespace TaxyApp.Core.DataModel.Order
 
             Managers.LocationManager locationMG = Managers.ManagerFactory.Instance.GetLocationManager();
 
-            IEnumerable<Geopoint> geopoints = this._orderPointList.Where(p => p.IsDataReady())
+            IEnumerable<Geopoint> geopoints = this._orderItemList.OfType<OrderPoint>().Where(p => p.IsDataReady())
                 .OrderBy(p => p.Priority)
                 .Select(p => new Geopoint(new BasicGeoposition()
                     {
@@ -215,7 +240,7 @@ namespace TaxyApp.Core.DataModel.Order
             }
 
             int i = 0;
-            foreach(OrderPoint orderPoint in this._orderPointList.Where(p => p.IsDataReady()))
+            foreach(OrderPoint orderPoint in this._orderItemList.OfType<OrderPoint>().Where(p => p.IsDataReady()))
             {
                 string addr = 
                         string.Format("{0}, {1}, {2} {3}",

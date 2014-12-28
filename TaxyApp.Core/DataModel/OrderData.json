@@ -1,16 +1,29 @@
 ﻿{"OrderModel":{
-	"OrderPointList":
+	"OrderItemList":
 	[
 		{
 			"Priority": "0",
-			"PointTitle":"From",
+			"Title":"Маркса 89, Омск",
 			"Location": {"Address":"Омск, Маркса 89"}
 		},
 		{
 			"Priority": "1",
-			"PointTitle":"Point 1",
+			"Title":"Жуковского 33, Омск",
 			"Location": {"Address":"Омск, Жуковского 33"}
+		},
+		{
+			"Priority": "2",
+			"Title":"Address 2"
+		},
+		{
+			"Priority": "3",
+			"Title":"Now"
+		},
+		{
+			"Priority": "4",
+			"Title":"Services"
 		}
+
 	]
  }
 }
