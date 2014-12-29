@@ -69,12 +69,59 @@
                     </ListView.ItemTemplate>
 
                 </ListView>
+                
 
-                <DatePicker Date="{Binding Path=OrderModel.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"></DatePicker>
-                <TimePicker Time="{Binding Path=OrderModel.EndTime, Mode=TwoWay}"></TimePicker>
+                <!--<DatePicker Date="{Binding Path=OrderModel.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"></DatePicker>
+                <TimePicker Time="{Binding Path=OrderModel.EndTime, Mode=TwoWay}"></TimePicker>-->
             </StackPanel>
+            <Button Content="Make an order" Style="{StaticResource TaxyButtonGreenStyle}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="createBtnClick"/>
         </Grid>
 
+        <Popup VerticalOffset="10" HorizontalOffset="10" x:Name="ServicePopup">
+            <Grid Grid.Row="1" Margin="20,20,20,20" Background="#FF8D8D8D" Width="340" Height="570" >
+
+                <StackPanel>
+
+                    <ListView
+                    ItemsSource="{Binding OrderModel.OrderServiceList}"
+                    IsItemClickEnabled="True"
+                    Margin="20,20,20,20"
+                    >
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <CheckBox  Content="{Binding Path=Name}" IsChecked="{Binding Path=Checked, Mode=TwoWay}"></CheckBox>
+                                    <!--<TextBlock Text="{Binding Path=Name}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>-->
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                    <Button Content="OK" HorizontalAlignment="Center" Click="Button_Click"></Button>
+
+                </StackPanel>
+
+            </Grid>
+        </Popup>
+
+        <Popup VerticalOffset="100" HorizontalOffset="10" x:Name="DateTimePopup">
+            <Grid Grid.Row="1" Margin="20,20,20,20" Background="#FF8D8D8D" Width="340" Height="370" >
+                <StackPanel Margin="0,100,0,0">
+                    <DatePicker Header="Date:" Date="{Binding Path=OrderModel.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"></DatePicker>
+                    <TimePicker Header="Time:" Time="{Binding Path=OrderModel.EndTime, Mode=TwoWay}"></TimePicker>
+
+                    <Button Content="OK" HorizontalAlignment="Center" Click="Button_Click_1"></Button>
+                </StackPanel>
+            </Grid>
+        </Popup>
 
     </Grid>
 </Page>

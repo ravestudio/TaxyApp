@@ -32,6 +32,8 @@ namespace TaxyApp
         {
             this.InitializeComponent();
 
+            this.orderController.OrderModel.RouteMapControl = this.RouteMapControl;
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
@@ -101,6 +103,16 @@ namespace TaxyApp
         /// событий, которые не могут отменить запрос навигации.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.DefaultViewModel.OrderModel.ShowMyPossitionAsync().
+                ContinueWith(
+                t =>
+                {
+                    string status = "showed";
+                });
+
+            this.orderController.OrderModel.ShowRoute();
+
+
             this.navigationHelper.OnNavigatedTo(e);
         }
 

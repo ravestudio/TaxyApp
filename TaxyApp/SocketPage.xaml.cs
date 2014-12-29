@@ -124,6 +124,19 @@ namespace TaxyApp
                     socketMG.Start();
 
                 });
+
+            SocketClient.OnMessage += SocketClient_OnMessage;
+        }
+
+        void SocketClient_OnMessage(object sender, EventArgs e)
+        {
+            Windows.Foundation.IAsyncAction action =
+                this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    TaxyApp.Core.SocketClient client = (TaxyApp.Core.SocketClient)sender;
+                    socketMsg.Text = client.Message;
+                });
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -81,14 +81,34 @@ namespace TaxyApp.Controller
         {
             Windows.UI.Xaml.Controls.ItemClickEventArgs e = (Windows.UI.Xaml.Controls.ItemClickEventArgs)parameter;
 
-            TaxyApp.Core.DataModel.Order.OrderPoint orderPoint = (TaxyApp.Core.DataModel.Order.OrderPoint)e.ClickedItem;
+
+            if (e.ClickedItem as TaxyApp.Core.DataModel.Order.OrderPoint != null)
+            {
+                TaxyApp.Core.DataModel.Order.OrderPoint orderPoint = (TaxyApp.Core.DataModel.Order.OrderPoint)e.ClickedItem;
 
 
-            Frame rootFrame = Window.Current.Content as Frame;
+                Frame rootFrame = Window.Current.Content as Frame;
 
-            _controller.SearchModel.SelectedPoint = orderPoint;
+                _controller.SearchModel.SelectedPoint = orderPoint;
 
-            rootFrame.Navigate(typeof(AddPointPage));
+                rootFrame.Navigate(typeof(AddPointPage));
+
+            }
+            else
+            {
+                TaxyApp.Core.DataModel.Order.OrderItem item = (TaxyApp.Core.DataModel.Order.OrderItem)e.ClickedItem;
+
+                if (item.Cmd == "Services")
+                {
+                    _controller.OrderModel.ShowServices();
+                }
+
+                if (item.Cmd == "Now")
+                {
+                    _controller.OrderModel.ShowDateTime();
+                }
+
+            }
 
         }
     }

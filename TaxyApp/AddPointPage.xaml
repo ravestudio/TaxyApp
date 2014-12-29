@@ -29,17 +29,19 @@
         </Grid.RowDefinitions>
 
         <!--Панель заголовка-->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
+        <!--<StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="MY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
             <TextBlock Text="add point" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
+        </StackPanel>-->
 
         <!--TODO: Содержимое должно размещаться в следующей сетке-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="0,0,0,0">
+            <Maps:MapControl x:Name="RouteMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,70,0,0"/>
+
             <StackPanel>
                 <TextBox x:Name="SearchText"
-                         Text="{Binding Path = SearchModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding Path=SearchModel.LocationReady, Mode=TwoWay}">
+                         Text="{Binding SearchModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding SearchModel.LocationReady, Mode=TwoWay}">
                     <!--<i:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="TextChanged">
                             <core:InvokeCommandAction Command="{Binding SearchChanged}">
@@ -55,8 +57,7 @@
 
                     <i:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="ItemClick">
-                            <core:InvokeCommandAction Command="{Binding SelectItem}">
-                            </core:InvokeCommandAction>
+                            <core:InvokeCommandAction Command="{Binding SelectItem}"/>
                         </core:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
 
@@ -72,13 +73,19 @@
                                 <StackPanel.Background>
                                     <SolidColorBrush Color="{ThemeResource PhoneBaseMediumMidColor}"/>
                                 </StackPanel.Background>
-                                <TextBlock Text="{Binding Address}" Style="{ThemeResource TitleTextBlockStyle}" Margin="5,15"></TextBlock>
+                                <TextBlock Text="{Binding Address}" Style="{ThemeResource TitleTextBlockStyle}" Margin="5,15"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
+
+
             </StackPanel>
+
         </Grid>
+
+    
+        
     </Grid>
 </Page>

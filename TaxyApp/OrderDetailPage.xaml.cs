@@ -32,9 +32,14 @@ namespace TaxyApp
         {
             this.InitializeComponent();
 
+            
+
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            orderController.OrderModel.ServicePopup = ServicePopup;
+            orderController.OrderModel.DateTimePopup = DateTimePopup;
 
             this.orderController.OrderModel.Dispatcher = this.Dispatcher;
         }
@@ -109,5 +114,20 @@ namespace TaxyApp
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ServicePopup.IsOpen = false;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DateTimePopup.IsOpen = false;
+        }
+
+        private void createBtnClick(object sender, RoutedEventArgs e)
+        {
+            this.orderController.CreateOrder();
+        }
     }
 }

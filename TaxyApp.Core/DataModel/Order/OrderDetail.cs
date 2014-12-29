@@ -17,6 +17,9 @@ namespace TaxyApp.Core.DataModel.Order
 
         public Windows.UI.Core.CoreDispatcher Dispatcher { get; set; }
 
+        public Windows.UI.Xaml.Controls.Primitives.Popup ServicePopup { get; set; }
+        public Windows.UI.Xaml.Controls.Primitives.Popup DateTimePopup { get; set; }
+
         public DateTime EndDate { get; set; }
         public DateTime EndTime { get; set; }
 
@@ -74,13 +77,21 @@ namespace TaxyApp.Core.DataModel.Order
         {
             int thread = Environment.CurrentManagedThreadId;
 
-            Core.Managers.MapPainter painter = Core.Managers.ManagerFactory.Instance.GetMapPainter();
+            this.ShowRoute();
 
-            Task showRoutTask = painter.ShowRoute(this.RouteMapControl, this.MapRoute).ContinueWith(t =>
+        }
+
+        public void ShowRoute()
+        {
+            if (this.MapRoute != null)
+            {
+                Core.Managers.MapPainter painter = Core.Managers.ManagerFactory.Instance.GetMapPainter();
+
+                Task showRoutTask = painter.ShowRoute(this.RouteMapControl, this.MapRoute).ContinueWith(t =>
                 {
                     string msg = "route showed";
                 });
-
+            }
         }
 
         public Windows.UI.Xaml.Controls.Maps.MapControl RouteMapControl { get; set; }
@@ -214,7 +225,15 @@ namespace TaxyApp.Core.DataModel.Order
             await painter.ShowMyPossitionAsync(this.RouteMapControl);
         }
 
+        public void ShowServices()
+        {
+            this.ServicePopup.IsOpen = true;
+        }
 
+        public void ShowDateTime()
+        {
+            this.DateTimePopup.IsOpen = true;
+        }
 
 
 

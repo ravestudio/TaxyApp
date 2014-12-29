@@ -23,6 +23,8 @@ namespace TaxyApp.Core
             clientSocket = new StreamSocket();
         }
 
+        public string Message { get; set; }
+
         public async Task ConnectAsync(string ServerHostname, string ServerPort)
         {
             HostName serverHost = new HostName(ServerHostname);
@@ -188,6 +190,8 @@ namespace TaxyApp.Core
                     {// Package complete
                         String alltext = Encoding.UTF8.GetString(payload, 0, payload.Length);
 
+                        this.Message = alltext;
+                        this.NotifyMessage(alltext);
                         
                         //Pattern pt = Pattern.compile("\\[\"message\",\"(.*)\"\\]");
                         //Matcher mt = pt.matcher(alltext);
@@ -304,6 +308,18 @@ namespace TaxyApp.Core
             }
             return reply;
 
+        }
+
+        public event EventHandler OnMessage;
+
+        public void NotifyMessage(string msg)
+        {
+            if (OnMessage != null)
+            {
+                EventArgs args = new EventArgs();
+
+                OnMessage(this, args);
+            }
         }
     }
 }
