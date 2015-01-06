@@ -109,7 +109,7 @@ namespace TaxyApp.Controller
 
                         Frame frame = _controller.Page.Frame;
 
-                        frame.Navigate(typeof(PivotPage));
+                        frame.Navigate(typeof(Views.MainPage));
                     });
                 });
             
