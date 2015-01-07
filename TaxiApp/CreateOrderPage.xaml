@@ -1,0 +1,123 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TaxiApp"
+    xmlns:Converters ="using:TaxiApp.Core.Common"
+    xmlns:viewModel="using:TaxiApp.Core.DataModel"
+    xmlns:controller="using:TaxiApp.Controller"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="TaxiApp.CreateOrderPage"
+    mc:Ignorable="d"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    d:DataContext="{Binding Source={d:DesignData Source=../TaxiApp.Core/DataModel/OrderData.json, Type=controller:OrderController}}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <Converters:DateTimeToDateTimeOffsetConverter
+            x:Key="DateTimeToDateTimeOffsetConverter"/>
+    </Page.Resources>
+
+    <Grid>
+
+        <Pivot x:Uid="Pivot" Title="TAXY APPLICATION" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            
+            <PivotItem
+                x:Uid="PivotRoute"
+                Header="Route"
+                >
+                
+            
+                <!--Панель заголовка-->
+                <!--<StackPanel Grid.Row="0" Margin="19,0,0,0">
+                    <TextBlock Text="TAXY APPLICATION" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
+                    <TextBlock Text="Create Order" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+                </StackPanel>-->
+
+                <!--TODO: Содержимое должно размещаться в следующей сетке-->
+                <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+                    <StackPanel>
+                    <ListView
+                    ItemsSource="{Binding OrderModel.OrderPointList}"
+                    IsItemClickEnabled="True"
+                    >
+
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="ItemClick">
+                                <core:InvokeCommandAction Command="{Binding SetLocation}">
+                                </core:InvokeCommandAction>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,10,0,0">
+                                    <TextBlock Text="{Binding Path=PointTitle}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>
+                                    <TextBlock Text="{Binding Path=Location.Address}" Style="{StaticResource ComboBoxPlaceholderTextBlockStyle}" Margin="5,15"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                        <DatePicker Date="{Binding Path=OrderModel.EndDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}, Mode=TwoWay}"></DatePicker>
+                        <TimePicker Time="{Binding Path=OrderModel.EndTime, Mode=TwoWay}"></TimePicker>
+                    </StackPanel>
+                </Grid>
+            </PivotItem>
+            
+            <PivotItem
+                x:Uid="PivotService"
+                Header="Services" Margin="0,0">
+                <Grid Grid.Row="1" x:Name="ServicesGrid" Margin="19,9.5,19,0">
+
+                    <ListView
+                    ItemsSource="{Binding OrderModel.OrderServiceList}"
+                    IsItemClickEnabled="True"
+                    >
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <CheckBox  Content="{Binding Path=Name}" IsChecked="{Binding Path=Checked, Mode=TwoWay}"></CheckBox>
+                                    <!--<TextBlock Text="{Binding Path=Name}" Style="{ThemeResource SubheaderTextBlockStyle}"></TextBlock>-->
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                    
+                </Grid>
+            </PivotItem>
+
+
+            <PivotItem
+                x:Uid="PivotMap"
+                Header="Map" Margin="0,0">
+                <Maps:MapControl x:Name="RouteMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Uid="CreateAppBarButton" x:Name="CreateAppBarButton" Label="Create" Icon="Accept" Click="CreateAppBarButton_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

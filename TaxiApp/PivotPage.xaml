@@ -1,0 +1,161 @@
+﻿<Page
+    x:Class="TaxiApp.PivotPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TaxiApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:TaxiApp.Data"
+    xmlns:entity="using:TaxiApp.Core.Entities"
+    mc:Ignorable="d"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    >
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
+    <Grid>
+        <Pivot x:Uid="Pivot" Title="MY APPLICATION" x:Name="pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem
+                x:Uid="PivotMenu"
+                Header="Main menu">
+                <Grid>
+                    <Button x:Uid="CreateOrderBtn" x:Name="CreateOrderBtn" Content="Create Order" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Click="CreateOrderBtn_Click"/>
+                    <Button x:Uid="myOrderListBtn" x:Name="myOrderListBtn" Content="My Order list" HorizontalAlignment="Left" Margin="0,140,0,0" VerticalAlignment="Top" Click="myOrderListBtn_Click"/>
+                    <Button x:Uid="SocketPgBtn" x:Name="SocketPgBtn" Content="Socket" HorizontalAlignment="Left" Margin="0,210,0,0" VerticalAlignment="Top" Click="SocketPgBtn_Click"/>
+                </Grid>
+                
+            </PivotItem>
+
+            <PivotItem
+                x:Uid="PivotOrderList"
+                Header="My Orders"
+                DataContext="{Binding OrderList}"
+                d:DataContext="{Binding Source={d:DesignData Source=../TaxiApp.Core/DataModel/OrderList.json, Type=entity:OrderDS}}">
+
+                <ListView
+                     ItemsSource="{Binding}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock
+                                    Text="{Binding Title}"
+                                    TextWrapping="Wrap"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
+                                
+                                <ListView
+                                    ItemsSource="{Binding Route}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding Address}"
+                                                Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                                Margin="0,5,19,0"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                                <TextBlock
+                                    Text="{Binding DistanceAndPrice}"
+                                    TextWrapping="Wrap"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
+                                
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+                
+            </PivotItem>
+            <!--Сводный элемент один-->
+            <PivotItem
+                x:Uid="PivotItem1"
+                Margin="19,14.5,0,0"
+                Header="first"
+                DataContext="{Binding FirstGroup}"
+                d:DataContext="{Binding Groups[0], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}"
+                CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <!--Двухстрочный список с переносом текста на новую строку-->
+                <ListView
+                    ItemsSource="{Binding Items}"
+                    IsItemClickEnabled="True"
+                    ItemClick="ItemView_ItemClick"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,9.5">
+                                <TextBlock
+                                    Text="{Binding Title}"
+                                    TextWrapping="Wrap"
+                                    Pivot.SlideInAnimationGroup="1"
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True"
+                                    Style="{ThemeResource ListViewItemTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
+                                <TextBlock
+                                    Text="{Binding Description}"
+                                    TextWrapping="WrapWholeWords"
+                                    Pivot.SlideInAnimationGroup="2" 
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True" 
+                                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                    Margin="0,0,19,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+
+            <!--Сводный элемент два-->
+            <PivotItem
+                x:Uid="PivotItem2"
+                Margin="19,14.5,0,0"
+                Header="second"
+                DataContext="{Binding SecondGroup}"
+                d:DataContext="{Binding Groups[1], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+                <!--Двухстрочный список без переноса текста на новую строку-->
+                <ListView
+                    ItemsSource="{Binding Items}"
+                    IsItemClickEnabled="True"
+                    ItemClick="ItemView_ItemClick"
+                    Loaded="SecondPivot_Loaded"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,9.5">
+                                <TextBlock
+                                    Text="{Binding Title}"
+                                    Pivot.SlideInAnimationGroup="1"
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True"
+                                    Style="{StaticResource ListViewItemTextBlockStyle}"/>
+                                <TextBlock
+                                    Text="{Binding Description}"
+                                    Pivot.SlideInAnimationGroup="2"
+                                    CommonNavigationTransitionInfo.IsStaggerElement="True"
+                                    Style="{StaticResource ListViewItemContentTextBlockStyle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Uid="AddAppBarButton" x:Name="AddAppBarButton" Label="add" Icon="Add" Click="AddAppBarButton_Click" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="secondary command 1" />
+                <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="secondary command 2" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
